@@ -11,6 +11,7 @@ function Page() {
   // Handle form submission
   const handleForm = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
+      console.log("hello");
 
     // Attempt to sign up with provided email and password
     const { result, error } = await signUp(email, password);
