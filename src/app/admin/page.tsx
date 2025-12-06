@@ -3,7 +3,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useState } from 'react';
-import { collection, addDoc, query, where, getDocs, orderBy} from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
 // import EditModal from '@/components/EditModal.jsx';
 import useAuth from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
