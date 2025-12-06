@@ -1,14 +1,14 @@
 'use client'
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
 // import EditModal from '@/components/EditModal.jsx';
 import useAuth from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
 import ProjectCard from "@/components/ProjectCard";
 import NoProjectAlert from "@/components/NoProjectAlert";
+import CreateProjectModal from "@/components/CreateProjectModal";
 
 interface EditProjectModalProps {
   onClose: () => void; // 모달을 닫는 함수 (필수)
@@ -35,6 +35,7 @@ function CreateProject({ onClose }: EditProjectModalProps) {
       alert("프로젝트 이름을 입력하세요.");
       return; 
     }
+
     try {
       console.log("저장 시작");
       const projectsCollectionRef = collection(db, "Projects");
@@ -57,14 +58,13 @@ function CreateProject({ onClose }: EditProjectModalProps) {
   };
 
   return (
-    // 전체 컨테이너: 화면 전체에 고정(fixed), 중앙 정렬
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       
       {/* 오버레이 (배경 흐림 효과) */}
-      <div 
+      {/* <div 
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
         onClick={onClose} // 배경 클릭 시 닫기
-      ></div>
+      ></div> */}
 
       {/* 모달 내용 (Content) */}
       <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full relative z-10">
@@ -329,7 +329,8 @@ setProjects(projectsList);
           
         </div>
         {isActionModalOpen && <EditAction onClose={closeActionModal} />}
-        {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />}
+        {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
+        {isProjectModalOpen && <CreateProjectModal isOpen={isProjectModalOpen} onClose={closeProjectModal} />}
 
     </div>
     </div>
