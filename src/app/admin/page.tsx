@@ -8,6 +8,7 @@ import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴
 // import EditModal from '@/components/EditModal.jsx';
 import useAuth from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
 import ProjectCard from "@/components/ProjectCard";
+import NoProjectAlert from "@/components/NoProjectAlert";
 
 interface EditProjectModalProps {
   onClose: () => void; // 모달을 닫는 함수 (필수)
@@ -180,14 +181,24 @@ function Page() {
   const closeProjectModal = () => setIsProjectModalOpen(false);
 
 // 🔑 1. 프로젝트 목록을 저장할 상태
-  interface Project {
-    id: string; // Firestore 문서 ID는 제외하고 데이터 필드만 명시하는 경우가 많습니다.
+interface Project {
+    id: string;
     name: string;
-    startDate: string;
-    createdAt: any; // Date 타입 또는 Firestore Timestamp 타입일 수 있습니다.
     userId: string;
+    goal: string;
+    startDate: string; //Timestamp.now() from fb
+    finishDate: string; //Timestamp.now() from fb
+    is_completed: boolean;
+    }
+
+    interface User {
+    id: string; //이메일
+    nickname: string;
   }
+
   const [projects, setProjects] = useState<Project[]>([]);  
+  // const [user, setUser] = useState<User>();  
+
   const [loadingProjects, setLoadingProjects] = useState(true);
 
   // 2. 인증 상태 가져오기
@@ -247,25 +258,29 @@ setProjects(projectsList);
   }, [user, router]); // Include 'router' in the dependency array to resolve eslint warning
 
   return (
-    <div>
-    <h1>Your Daily Challenges</h1>
-      <div className="flex justify-between space-x-6">
-      {/* 덩어리 1 */}
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        <p className="text-xl font-semibold mb-3">YESTERDAY</p>
-        <p className="text-sm text-gray-500 mb-4">Cherry space</p>
+    <div className="container mx-auto ">
+      <div className="flex justify-center items-center">
+          <h1 className="text-gray-900 
+             text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
+             font-semibold                        /* 굵기: 800 (아주 굵게) */
+             leading-none                          /* 행간: 좁게 (가장 좁게) */
+             tracking-tight mb-4">                 
+          DAILY-U
+        </h1> 
       </div>
+           
+      <div className="flex justify-between items-center space-x-6">
+      {/* 덩어리 1 */}
+        <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
+          <p className="text-xl font-semibold mb-3">YESTERDAY</p>
+          <p className="text-sm text-gray-500 mb-4">Cherry space</p>
+        </div>
 
         
       {/* 덩어리 2 */}
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
         <p className="text-xl font-semibold mb-3">TODAY</p>
-           {/* <button 
-            onClick={openActionModal} 
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded transition duration-150"
-          >
-            프로젝트 A : 액션 정보 수정
-          </button> */}
+           
            
             {loadingAuth || loadingProjects ? (
             <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
@@ -274,14 +289,8 @@ setProjects(projectsList);
               // 🔑 프로젝트 목록 표시
               <div className="flex flex-wrap gap-6">
                 {projects.length === 0 ? (
-                  <div className="w-full text-center p-10 border rounded-xl bg-white">
-                    <p className="text-xl text-indigo-600">아직 등록된 프로젝트가 없습니다. 🚀</p>
-                    <button 
-                    onClick={openProjectModal} 
-                    className="mt-4 bg-indigo-500 text-white p-2 rounded">
-                      새 프로젝트 추가
-                    </button>
-                  </div>
+                  <NoProjectAlert/>
+
                 ) : (
                   
                   // 조회된 프로젝트를 반복하여 덩어리(카드)로 보여줍니다.
@@ -315,13 +324,12 @@ setProjects(projectsList);
       </div>
       
       {/* 덩어리 3 */}
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        <p className="text-xl font-semibold mb-3">Tomorrow</p>
-        <p className="text-sm text-gray-500 mb-4">Cherry space</p>
-        
-      </div>
-      {isActionModalOpen && <EditAction onClose={closeActionModal} />}
-      {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />}
+        <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
+          <p className="text-xl font-semibold mb-3">Setting Space</p>
+          
+        </div>
+        {isActionModalOpen && <EditAction onClose={closeActionModal} />}
+        {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />}
 
     </div>
     </div>

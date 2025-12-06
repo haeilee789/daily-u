@@ -3,20 +3,28 @@ import { db } from '@/firebase/firebase';
 // src/firebase/firebase.js
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, limit } from 'firebase/firestore'; 
 
+interface User {
+	id: string; //이메일
+	nickname: string;
+}
+
 interface Project {
     id: string;
     name: string;
-    startDate: string;
-    createdAt: any;
     userId: string;
-}
+    goal: string;
+    startDate: string; //Timestamp.now() from fb
+    finishDate: string; //Timestamp.now() from fb
+    is_completed: boolean;
+    }
 
 interface Action {
-    id: string;
+    id: string; 
     content: string;
-    isModified: boolean; // 🔑 수정 여부 추적용
-    createdAt: any;
     projectId: string;
+    is_completed: boolean;
+	  reason: string;
+	  date: string; //Timestamp.now() from fb
 }
 
 interface ProjectCardProps {
@@ -59,7 +67,7 @@ export default function ProjectCard({ project, user }: ProjectCardProps) {
                     projectId: project.id,
                     content: `[자동 생성] ${project.name} 프로젝트 일일 검토`,
                     isCompleted: false,
-                    isModified: false, // 🔑 초기에는 수정되지 않은 상태
+                    is_completed: false, // 🔑 초기에는 수정되지 않은 상태
                     dayKey: todayStr, // 🔑 검색을 위해 날짜 키 저장
                     createdAt: new Date(),
                     userId: user.uid,
@@ -90,9 +98,9 @@ export default function ProjectCard({ project, user }: ProjectCardProps) {
 
     
     // 🔑 스페이스필러 상태를 결정 (오늘 자동 생성된 액션이 수정되지 않았는지 확인)
-    const showSpacefiller = actions.length > 0 && actions.every(a => a.content.includes('[자동 생성]') && a.isModified === false);
+    const showSpacefiller = actions.length > 0 && actions.every(a => a.content.includes('[자동 생성]') && a.is_completed === false);
 
-    // 🔑 액션 수정 함수 (isModified 상태 변경)
+    // 🔑 액션 수정 함수 (is_completed 상태 변경)
     const handleActionEdit = async (actionId: string, newContent: string) => {
         if (!user) return;
         
@@ -100,12 +108,12 @@ export default function ProjectCard({ project, user }: ProjectCardProps) {
         
         await updateDoc(actionRef, {
             content: newContent,
-            isModified: true, // 🔑 수정되었음을 기록
+            is_completed: true, // 🔑 수정되었음을 기록
             updatedAt: new Date(),
         });
 
         // 상태 업데이트
-        setActions(actions.map(a => a.id === actionId ? { ...a, content: newContent, isModified: true } : a));
+        setActions(actions.map(a => a.id === actionId ? { ...a, content: newContent, is_completed: true } : a));
     };
 
     return (
@@ -123,12 +131,12 @@ export default function ProjectCard({ project, user }: ProjectCardProps) {
                         {actions.map(action => (
                             <div key={action.id} className="p-2 border rounded mb-1 bg-gray-50">
                                 {/* 🚨 실제 앱에서는 input/textarea로 감싸서 수정 기능을 제공해야 합니다. */}
-                                <span className={action.isModified ? 'font-normal' : 'italic text-red-500'}>
+                                <span className={action.is_completed ? 'font-normal' : 'italic text-red-500'}>
                                     {action.content}
                                 </span>
                                 
                                 {/* 🔑 임시 수정 버튼 (테스트용) */}
-                                {!action.isModified && (
+                                {!action.is_completed && (
                                     <button 
                                         onClick={() => handleActionEdit(action.id, `새로 수정한 액션 내용: ${new Date().toLocaleTimeString()}`)}
                                         className="text-xs text-blue-500 ml-2"

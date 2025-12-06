@@ -9,7 +9,7 @@ export default function Home() {
       {/* <h1> hello world!</h1>
        */}
 
-        <h1 class="text-gray-900 
+        <h1 className="text-gray-900 
              text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
              font-extrabold                        /* 굵기: 800 (아주 굵게) */
              leading-none                          /* 행간: 좁게 (가장 좁게) */
