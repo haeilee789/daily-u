@@ -9,7 +9,7 @@ import { useAuthContext } from "@/context/AuthContext";
 
 import CreateProjectModal from "@/components/CreateProjectModal";
 import NoProjectAlert from "@/components/NoProjectAlert";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectList from "@/components/ProjectList";
 import SignOutButton from "@/components/signOut";
 
 interface EditProjectModalProps {
@@ -17,82 +17,6 @@ interface EditProjectModalProps {
   // title?: string;    // 만약 optional한 string 타입의 title을 추가하고 싶다면 이렇게 정의합니다.
 }
 
-function CreateProject({ onClose }: EditProjectModalProps) {
-  const [projectName, setProjectName] = useState('');
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]); // 오늘 날짜로 초기화x
-  const { user, loading } = useAuth();
-  const handleSave = async (e: React.FormEvent) => {
-    console.log(db);
-    e.preventDefault(); 
-    
-    // 로딩 중이거나 사용자가 없으면 저장 중단
-    if (loading) return;
-    if (!user) {
-      alert("로그인이 필요합니다. 프로젝트를 저장할 수 없습니다.");
-      return; 
-    }
-    const currentUserId = user.uid;
-
-    if (!projectName) { 
-      alert("프로젝트 이름을 입력하세요.");
-      return; 
-    }
-
-  
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      
-      {/* 오버레이 (배경 흐림 효과) */}
-      {/* <div 
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-        onClick={onClose} // 배경 클릭 시 닫기
-      ></div> */}
-
-      {/* 모달 내용 (Content) */}
-      <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full relative z-10">
-        
-        <h2 className="text-2xl font-bold mb-4">프로젝트 생성</h2>
-        
-        {/* 수정 폼 필드 예시 */}
-        <form onSubmit={handleSave}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-              프로젝트 이름
-            </label>
-            <input 
-                type="text" 
-                id="name" 
-                className="shadow border rounded w-full py-2 px-3" 
-                placeholder="프로젝트 이름을 입력하세요" 
-                value={projectName} 
-                onChange={(e) => setProjectName(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex justify-end space-x-3 mt-6">
-            <button 
-              type="button" 
-              onClick={onClose}
-              className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
-            >
-              취소
-            </button>
-            <button 
-              type="submit" 
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              저장
-            </button>
-          </div>
-          
-        </form>
-        
-      </div>
-    </div>
-  );
-}
 
 function EditAction({ onClose }: { onClose: () => void }) {
   // 모달 내의 상태 관리 (예: 입력 필드 값)는 여기에 추가됩니다.
@@ -199,7 +123,7 @@ interface Project {
         // Firestore 쿼리 정의: Projects 컬렉션에서 userId가 현재 사용자의 uid와 일치하는 문서만 조회
         const q = query(
           collection(db, "Projects"),
-          where("userId", "==", user.uid)
+          where("user", "==", user.email)
         );
 
         // 쿼리 실행
@@ -271,25 +195,9 @@ setProjects(projectsList);
                 ) : (
                   
                   // 조회된 프로젝트를 반복하여 덩어리(카드)로 보여줍니다.
-                  projects.map(project => (
-                    <div 
-                      key={project.id} 
-                      className="w-80 p-6 border rounded-xl shadow-lg bg-white transform hover:shadow-xl transition"
-                    >
-                      <h3 className="text-2xl font-bold mb-3 text-gray-800">{project.name}</h3> {/* 🔑 프로젝트 이름 */}
-                      <p className="text-sm text-gray-500 mb-4">시작일: {project.startDate}</p>
-                      
-                      {/* 여기에 할 일 목록 등의 추가 정보가 들어갑니다 */}
-
-                      <button 
-                        onClick={openActionModal} 
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded mt-4"
-                      >
-                        상세 보기 / 수정
-                      </button>
-                    </div>
-                  ))
-                )}
+                 <ProjectList projects={projects}/>
+                )
+              }
             </div>
            )}
       
