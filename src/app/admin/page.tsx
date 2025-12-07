@@ -1,14 +1,16 @@
 'use client'
-import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
-// import EditModal from '@/components/EditModal.jsx';
-import useAuth from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
-import ProjectCard from "@/components/ProjectCard";
-import NoProjectAlert from "@/components/NoProjectAlert";
+import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
+import { useAuthContext } from "@/context/AuthContext";
+
+
 import CreateProjectModal from "@/components/CreateProjectModal";
+import NoProjectAlert from "@/components/NoProjectAlert";
+import ProjectCard from "@/components/ProjectCard";
+import SignOutButton from "@/components/signOut";
 
 interface EditProjectModalProps {
   onClose: () => void; // 모달을 닫는 함수 (필수)
@@ -36,25 +38,7 @@ function CreateProject({ onClose }: EditProjectModalProps) {
       return; 
     }
 
-    try {
-      console.log("저장 시작");
-      const projectsCollectionRef = collection(db, "Projects");
-
-      await addDoc(projectsCollectionRef, {
-        name: projectName,
-        startDate: startDate,
-        userId: currentUserId, // <--- 🔑 useAuth에서 가져온 ID 사용
-        createdAt: new Date(),
-      });
-      console.log("await 완료, alert 직전")
-      alert("프로젝트가 성공적으로 추가되었습니다!");
-      onClose(); 
-
-      
-    } catch (error) {
-      console.error("문서 작성 중 오류 발생:", error);
-      alert("데이터베이스 저장에 실패했습니다.");
-    } 
+  
   };
 
   return (
@@ -167,10 +151,9 @@ function EditAction({ onClose }: { onClose: () => void }) {
 }
 
 function Page() {
-  // Access the user object from the authentication context
-  // const { user } = useAuthContext();
-  const { user } = useAuthContext() as { user: any }; // Use 'as' to assert the type as { user: any }
-  const router = useRouter();
+  const { user, loading } = useAuthContext();  const router = useRouter();
+  const [projects, setProjects] = useState<Project[]>([]);  
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const openActionModal = () => setIsActionModalOpen(true);
@@ -196,17 +179,11 @@ interface Project {
     nickname: string;
   }
 
-  const [projects, setProjects] = useState<Project[]>([]);  
-  // const [user, setUser] = useState<User>();  
 
-  const [loadingProjects, setLoadingProjects] = useState(true);
-
-  // 2. 인증 상태 가져오기
-  const { loading: loadingAuth } = useAuth();
   
   useEffect(() => {
     // 인증 로딩 중이면 기다립니다.
-    if (loadingAuth) return;
+    if (loading) {return }
 
     setLoadingProjects(true);
 
@@ -246,7 +223,7 @@ setProjects(projectsList);
     };
 
     fetchProjects();
-  }, [user, loadingAuth]); // 🔑 user나 인증 상태가 변할 때마다 다시 실행
+  }, [user, loading]); // 🔑 user나 인증 상태가 변할 때마다 다시 실행
 
   
   useEffect(() => {
@@ -282,7 +259,7 @@ setProjects(projectsList);
         <p className="text-xl font-semibold mb-3">TODAY</p>
            
            
-            {loadingAuth || loadingProjects ? (
+            {loading || loadingProjects ? (
             <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
               ) : (
               
@@ -326,6 +303,7 @@ setProjects(projectsList);
       {/* 덩어리 3 */}
         <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-xl font-semibold mb-3">Setting Space</p>
+          <SignOutButton/>
           
         </div>
         {isActionModalOpen && <EditAction onClose={closeActionModal} />}

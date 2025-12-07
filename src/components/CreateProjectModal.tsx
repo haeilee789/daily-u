@@ -1,25 +1,39 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useEffect, useState } from "react";
+import { AuthContext } from '@/context/AuthContext';
 import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
-import useAuth from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
 import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
+import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
+
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
+interface Project {
+    id: string;
+    name: string;
+    userId: string;
+    goal: string;
+    startDate: string; //Timestamp.now() from fb
+    is_completed: boolean;
+    type: string;
+  }
+
 interface ModalProps {
   isOpen: boolean;
-  onClose: () => void; // 부모로부터 받은 닫기 함수
-  // children: React.ReactNode;
+  onClose: () => void; 
+  children: React.ReactNode;
 }
 
 const CreateProject = ({ isOpen, onClose }:ModalProps) => {
+  const authContext = useContext(AuthContext);
+
+  const { user, loading } = useContext(AuthContext);
   const [projectName, setProjectName] = useState('');
   const [goal, setGoal] = useState('');
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]); // 오늘 날짜로 초기화x
   const [type, setType] = useState("text");
   const [cbLabel, setCbLabel] = useState("");
   // const [isCheckbox, setCheckbox] = useState(false);
-  // const { user, loading } = useAuth();
 
   // const handleSave = async (e: React.FormEvent) => {
   //   console.log("handling the save");
@@ -31,19 +45,55 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
   //   }
   // }
 
+  if (loading) {
+    return <p>로딩 중...</p>;
+  }
+  
+  if (!user) {
+    return <p>로그인이 필요합니다.</p>;
+  }
+  const userEmail = user.email
+
+
   const handleTypeChange = (value : string) => {
     setType(value);
     // if (value =='checkbox') setCheckbox(true)
     //   else setCheckbox(false)
   }
 
-  const handleSave = () => {
+  const handleSave = async(e : any) => {
+    e.preventDefault()
     console.log("handling the save");
       if (!projectName) { 
       alert("프로젝트 이름을 입력하세요.");
       return; 
     } 
-    alert(projectName)
+
+      try {
+      console.log("저장 시작");
+      
+      const projectsCollectionRef = collection(db, "Projects");
+
+      await addDoc(projectsCollectionRef, {
+        user: userEmail, 
+        name: projectName,
+        goal:goal,
+        startDate: startDate,
+        isCompleted:false,
+        type:type
+
+      });
+      console.log("await 완료, alert 직전")
+      alert("프로젝트가 성공적으로 추가되었습니다!");
+      onClose(); 
+
+      
+    } catch (error) {
+      
+      console.error("문서 작성 중 오류 발생:", error);
+      alert("데이터베이스 저장에 실패했습니다.");
+    } 
+
   }
   if (!isOpen) return null;
 
@@ -76,8 +126,8 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
                 id="name" 
                 className="shadow border rounded w-full py-2 px-3" 
                 placeholder="프로젝트 목표를 입력하쇼" 
-                value={projectName} 
-                onChange={(e) => setProjectName(e.target.value)}
+                value={goal} 
+                onChange={(e) => setGoal(e.target.value)}
             />
           </div>
           <div className="mb-4">
