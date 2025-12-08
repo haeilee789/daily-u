@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { ProjectCard } from './ProjectCard';
+import { ActionCard } from './ActionCard';
 import { Project, Action } from '@/types'
 
 
 
-interface ProjectListProps {
-  projects: Project[];
+interface ActionListProps {
+  actions: Action[];
 }
 
-const ProjectList = ({ projects }: ProjectListProps) => {
+const ActionList = ({ actions }: ActionListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | string | null>(null);
+  const [selectedActionId, setSelectedActionId] = useState<number | string | null>(null);
 
-  const openActionModal = (projectId: number | string) => {
-    setSelectedProjectId(projectId);
+  const openActionModal = (actionId: number | string) => {
+    setSelectedActionId(actionId);
     setIsModalOpen(true);
     // 상세 모달 로직...
   };
@@ -21,21 +21,21 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   return (
     <div className="flex flex-wrap gap-6 justify-center">
       <p>Action List</p>
-      {Array.isArray(projects) && projects.map(project => (
-        <ProjectCard 
-          key={project.id}
-          project={project}
+      {Array.isArray(actions) && actions.map(action => (
+        <ActionCard 
+          key={action.id}
+          action={action}
           openActionModal={openActionModal}
         />
       ))}
       
       {isModalOpen && (
         <div className="modal-placeholder">
-          선택된 프로젝트 ID: {selectedProjectId}
+          선택된 액션 ID: {selectedActionId}
         </div>
       )}
     </div>
   );
 };
 
-export default ProjectList;
+export default ActionList;

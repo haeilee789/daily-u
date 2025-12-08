@@ -16,7 +16,8 @@ export const ProjectCard = ({ project, openActionModal }: ProjectCardProps) => {
     <div className="w-auto p-2 flex flex-wrap gap-6 justify-center border rounded-xl shadow-md items-center">
 
       <h3 className="text-l font-bold mb-3 text-gray-800 items-center">{project.name}</h3>
-   
+      <h3 className="text-l font-bold mb-3 text-gray-800 items-center">{project.goal}</h3>
+
 
       <button 
         onClick={handleDetailClick} 

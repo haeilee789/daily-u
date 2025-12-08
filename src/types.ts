@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Project {
     id: string;
     name: string;
@@ -17,5 +19,10 @@ export interface Action {
     isCompleted: boolean; //cb일때 체크박스 상태용으로도 표시
 	  reason: string;
 	  date: string; //Timestamp.now() from fb
+    userId:string;
 
+}
+export interface DailyBounds {
+  start: Timestamp;
+  end: Timestamp;
 }

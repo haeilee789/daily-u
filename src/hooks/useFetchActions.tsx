@@ -3,56 +3,62 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase.js'; 
+import { createDailyBounds } from '@/lib/timeUtils';
 import { Project, Action } from '@/types';
+import ActionList from '@/components/ActionList';
+import { getTodayFB } from '@/lib/timeUtils'
+export const useFetchActions = (user: any | null, authLoading: boolean) => {
+  const [actions, setActions] = useState<Action[]>([]);
+  const [loadingActions, setLoadingActions] = useState(false);
+  const [actionError, setActionError] = useState<Error | null>(null); // 오류 처리도 추가
 
-// 가정: 현재 인증된 사용자 정보와 인증 상태 로딩 여부를 인수로 받음
-export const useFetchProjects = (user: any | null, authLoading: boolean) => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loadingProjects, setLoadingProjects] = useState(false);
-  const [error, setError] = useState<Error | null>(null); // 오류 처리도 추가
 
   useEffect(() => {
     if (authLoading) {
       return;
     }
 
-    setLoadingProjects(true);
-    setError(null);
+    setLoadingActions(true);
+    setActionError(null);
 
-    const fetchProjects = async () => {
+    const today = getTodayFB();
+    const fetchActions = async () => {
       if (!user) {
-        setProjects([]);
-        setLoadingProjects(false);
+        setActions([]);
+        setLoadingActions(false);
         return;
       }
 
       try {
         const q = query(
-          collection(db, "Projects"),
-          where("user", "==", user.email)
+          collection(db, "Actions"),
+          where("userId", "==", user.email)
+          ,where('date', "==", today)
         );
 
         const querySnapshot = await getDocs(q);
         
-        const projectsList = querySnapshot.docs.map(doc => ({
+        const actionsList = querySnapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data() as Omit<Project, 'id'>
+          ...doc.data() as Omit<Action, 'id'>
         }));
+        
 
-        setProjects(projectsList);
+        setActions(actionsList);
+        console.log(actions)
 
       } catch (e) {
-        console.error("프로젝트 조회 중 오류 발생:", e);
-        setError(e as Error); // 오류 상태 저장
-        setProjects([]);
+        console.error("액션 조회 중 오류 발생:", e);
+        setActionError(e as Error); // 오류 상태 저장
+        setActions([]);
       } finally {
-        setLoadingProjects(false);
+        setLoadingActions(false);
       }
     };
 
-    fetchProjects();
+    fetchActions();
   }, [user, authLoading]);
 
   // 필요한 상태와 값을 반환
-  return { projects, loadingProjects, error }; 
+  return { actions, loadingActions, actionError }; 
 };
