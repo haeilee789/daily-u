@@ -2,10 +2,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
-import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
+import { db } from '@/firebase/firebase.js'; 
 import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
 import { useAuthContext } from "@/context/AuthContext";
-
+import { useFetchProjects } from "@/hooks/useFetchProjects";
+import  { Project, Action} from "@/types"
 
 import CreateProjectModal from "@/components/CreateProjectModal";
 import NoProjectAlert from "@/components/NoProjectAlert";
@@ -76,8 +77,7 @@ function EditAction({ onClose }: { onClose: () => void }) {
 
 function Page() {
   const { user, loading } = useAuthContext();  const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);  
-  const [loadingProjects, setLoadingProjects] = useState(true);
+  const { projects, loadingProjects, error } = useFetchProjects(user, loading);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const openActionModal = () => setIsActionModalOpen(true);
@@ -87,68 +87,7 @@ function Page() {
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
 
-// 🔑 1. 프로젝트 목록을 저장할 상태
-interface Project {
-    id: string;
-    name: string;
-    userId: string;
-    goal: string;
-    startDate: string; //Timestamp.now() from fb
-    finishDate: string; //Timestamp.now() from fb
-    is_completed: boolean;
-    }
-
-    interface User {
-    id: string; //이메일
-    nickname: string;
-  }
-
-
   
-  useEffect(() => {
-    // 인증 로딩 중이면 기다립니다.
-    if (loading) {return }
-
-    setLoadingProjects(true);
-
-    const fetchProjects = async () => {
-      // 🚨 사용자가 로그인하지 않았으면 종료
-      if (!user) {
-        setProjects([]);
-        setLoadingProjects(false);
-        return;
-      }
-
-      try {
-        // Firestore 쿼리 정의: Projects 컬렉션에서 userId가 현재 사용자의 uid와 일치하는 문서만 조회
-        const q = query(
-          collection(db, "Projects"),
-          where("user", "==", user.email)
-        );
-
-        // 쿼리 실행
-        const querySnapshot = await getDocs(q);
-        console.log(querySnapshot);
-        // 결과 처리: 문서 ID와 데이터를 포함하여 배열로 저장
-        
-        const projectsList = querySnapshot.docs.map(doc => ({
-          id: doc.id, // 문서 ID (key로 사용)
-          ...doc.data() as Omit<Project, 'id'> // 실제 프로젝트 데이터
-        }));
-
-// 🔑  변환된 배열을 상태에 저장합니다.
-setProjects(projectsList);
-
-      } catch (error) {
-        console.error("프로젝트 조회 중 오류 발생:", error);
-      } finally {
-        setLoadingProjects(false);
-      }
-    };
-
-    fetchProjects();
-  }, [user, loading]); // 🔑 user나 인증 상태가 변할 때마다 다시 실행
-
   
   useEffect(() => {
     // Redirect to the home page if the user is not logged in
@@ -161,11 +100,11 @@ setProjects(projectsList);
   return (
     <div className="container mx-auto ">
       <div className="flex justify-center items-center">
-          <h1 className="text-gray-900 
-             text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
-             font-semibold                        /* 굵기: 800 (아주 굵게) */
-             leading-none                          /* 행간: 좁게 (가장 좁게) */
-             tracking-tight mb-4">                 
+        <h1 className="text-gray-900 
+          text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
+          font-semibold                        /* 굵기: 800 (아주 굵게) */
+          leading-none                          /* 행간: 좁게 (가장 좁게) */
+          tracking-tight mb-4">                 
           DAILY-U
         </h1> 
       </div>
@@ -175,31 +114,24 @@ setProjects(projectsList);
         <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-xl font-semibold mb-3">YESTERDAY</p>
           <p className="text-sm text-gray-500 mb-4">Cherry space</p>
-        </div>
-
-        
-      {/* 덩어리 2 */}
+      </div>
+          
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
         <p className="text-xl font-semibold mb-3">TODAY</p>
-           
-           
-            {loading || loadingProjects ? (
-            <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
-              ) : (
-              
-              // 🔑 프로젝트 목록 표시
-              <div className="flex flex-wrap gap-6">
-                {projects.length === 0 ? (
-                  <NoProjectAlert/>
-
-                ) : (
-                  
-                  // 조회된 프로젝트를 반복하여 덩어리(카드)로 보여줍니다.
-                 <ProjectList projects={projects}/>
-                )
-              }
-            </div>
-           )}
+            
+            
+        {loading || loadingProjects ? (
+        <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
+          ) : (
+          <div className="flex flex-wrap gap-6">
+          {projects.length === 0 ? (
+            <NoProjectAlert/>
+          ) : (                  
+            <ProjectList projects={projects}/>
+          )
+        }
+        </div>
+        )}
       
         <button 
           onClick={openProjectModal} 
@@ -207,18 +139,17 @@ setProjects(projectsList);
           프로젝트 추가
         </button>
       </div>
-      
-      {/* 덩어리 3 */}
-        <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-          <p className="text-xl font-semibold mb-3">Setting Space</p>
-          <SignOutButton/>
-          
-        </div>
-        {isActionModalOpen && <EditAction onClose={closeActionModal} />}
-        {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
-        {isProjectModalOpen && <CreateProjectModal isOpen={isProjectModalOpen} onClose={closeProjectModal} />}
 
-    </div>
+      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
+        <p className="text-xl font-semibold mb-3">Setting Space</p>
+        <SignOutButton/>
+      </div>
+
+          {isActionModalOpen && <EditAction onClose={closeActionModal} />}
+          {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
+          {isProjectModalOpen && <CreateProjectModal isOpen={isProjectModalOpen} onClose={closeProjectModal} />}
+
+      </div>
     </div>
   );
 }

@@ -36,12 +36,14 @@ exports.createDailyActionsForAllProjects = functions.https.onRequest(async (req,
         // 4. 프로젝트 순회하며 Action 문서 생성
         projectsSnapshot.forEach(projectDoc => {
             const projectId = projectDoc.id;
-            
+            const projectType = projectDoc.type;
+
             // 5. Action 인터페이스에 맞춘 데이터 생성
             const newActionData = {
-                content: `[${projectDoc.data().name}] 일일 작업 확인`, // project.name을 활용한 기본 내용
+                content: '', 
                 projectId: projectId,
-                is_completed: false,
+                type: projectType,
+                isCompleted: false,
                 reason: '',
                 date: dateId, 
                 createdAt: admin.firestore.FieldValue.serverTimestamp() // 생성 시간 기록

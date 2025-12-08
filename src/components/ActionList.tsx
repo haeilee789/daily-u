@@ -3,6 +3,7 @@ import { ProjectCard } from './ProjectCard';
 import { Project, Action } from '@/types'
 
 
+
 interface ProjectListProps {
   projects: Project[];
 }
@@ -19,6 +20,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
 
   return (
     <div className="flex flex-wrap gap-6 justify-center">
+      <p>Action List</p>
       {Array.isArray(projects) && projects.map(project => (
         <ProjectCard 
           key={project.id}
