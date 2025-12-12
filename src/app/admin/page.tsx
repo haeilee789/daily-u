@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from '@/firebase/firebase.js'; 
 import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
@@ -19,7 +19,8 @@ import ActionList from "@/components/ActionList";
 function Page() {
   const today = getToday();
   const { user, loading } = useAuthContext();  const router = useRouter();
-  const { projects, loadingProjects, error } = useFetchProjects(user, loading);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const { projects, loadingProjects, error } = useFetchProjects(user, loading, refreshTrigger);
   const { actions, loadingActions, actionError } = useFetchActions(user, loading);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
@@ -29,9 +30,17 @@ function Page() {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
+  
+  const handleProjectRefresh = useCallback(() => {
+    setRefreshTrigger(prev => prev + 1); // 상태를 변경하여 useFetchProjects 재실행 유도
+    console.log("프로젝트 목록 새로고침 신호 발생!");
+  }, []);
 
-  
-  
+  const handleProjectCreationSuccess = () => {
+      closeProjectModal();        // 모달 닫기
+      handleProjectRefresh();     // 새로고침 함수 호출
+  };
+
   useEffect(() => {
     if (user == null) {
       router.push("/");
@@ -89,8 +98,13 @@ function Page() {
 
           {isActionModalOpen && <EditAction onClose={closeActionModal} />}
           {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
-          {isProjectModalOpen && <CreateProjectModal isOpen={isProjectModalOpen} onClose={closeProjectModal} />}
-
+          {isProjectModalOpen && (
+            <CreateProjectModal 
+                isOpen={isProjectModalOpen} 
+                onClose={closeProjectModal} 
+                onCreated={handleProjectCreationSuccess} // ✅ 새로고침 로직이 포함된 함수 전달
+            />
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/fir
 import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
 import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
 import { Project, Action } from '@/types'
-
+import CreateAction from '@/firebase/firestore/CreateAction';
 
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -15,10 +15,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void; 
+  onCreated: () => void;  
   children: React.ReactNode;
 }
 
-const CreateProject = ({ isOpen, onClose }:ModalProps) => {
+const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
   const authContext = useContext(AuthContext);
 
   const { user, loading } = useContext(AuthContext);
@@ -26,7 +27,6 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
   const [goal, setGoal] = useState('');
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]); // 오늘 날짜로 초기화x
   const [type, setType] = useState("text");
-  const [cbLabel, setCbLabel] = useState("");
   // const [isCheckbox, setCheckbox] = useState(false);
 
   // const handleSave = async (e: React.FormEvent) => {
@@ -65,9 +65,9 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
       try {
       console.log("저장 시작");
       
-      const projectsCollectionRef = collection(db, "Projects");
+      const collectionRef = collection(db, "Projects");
 
-      await addDoc(projectsCollectionRef, {
+      const newProjectRef = await addDoc(collectionRef, {
         user: userEmail, 
         name: projectName,
         goal:goal,
@@ -76,8 +76,23 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
         type:type
 
       });
+
+      const newProjectId = newProjectRef.id;
+
+      const actionData = {
+        type: type,
+        content: "",
+        projectId: newProjectId,
+        isCompleted: false, //cb일때 체크박스 상태용으로도 표시
+        reason: "",
+        date: startDate
+      }
+      console.log("Firestore 액션생성작업 시작...");
+      const { result, error } = await CreateAction(actionData);
+
       console.log("await 완료, alert 직전")
       alert("프로젝트가 성공적으로 추가되었습니다!");
+      onCreated();
       onClose(); 
 
       
@@ -86,6 +101,8 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
       console.error("문서 작성 중 오류 발생:", error);
       alert("데이터베이스 저장에 실패했습니다.");
     } 
+
+    
 
   }
   if (!isOpen) return null;
