@@ -59,11 +59,11 @@ function Page() {
       </div>
           
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        <p className="text-xl font-semibold mb-3">TODAY {today}</p>
+        <p className="text-xl font-semibold mb-3">TODAY : {today}</p>
             
             
         {loading || loadingProjects ? (
-        <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
+        <p className="text-lg text-gray-500">Loading...</p>
           ) : (
           <div className="flex flex-wrap gap-6">
           {projects.length === 0 ? (
@@ -74,26 +74,13 @@ function Page() {
         }
         </div>
         )}
-
-        {loading || loadingProjects ? (
-        <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
-          ) : (
-          <div className="flex flex-wrap gap-6">
-          {projects.length === 0 ? (
-            <NoProjectAlert/>
-          ) : (                  
-            <ActionList actions={actions}/>
-          )
-        }
-        </div>
-        )} 
       
         <button 
           onClick={openProjectModal} 
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150"          >
           프로젝트 추가
         </button>
-      </div>
+      </div>  
 
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
         <p className="text-xl font-semibold mb-3">Setting Space</p>

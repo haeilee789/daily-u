@@ -28,7 +28,7 @@ export default function Home() {
         </Button>
 
         <Button asChild variant="outline" size="lg">
-          <Link href="/signUp">Sign Up</Link>
+          <Link href="/signup">Sign Up</Link>
         </Button>
 
         

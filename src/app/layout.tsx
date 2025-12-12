@@ -7,8 +7,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 // Metadata for the application
 export const metadata = {
-  title: 'Next.js + Firebase Starter',
-  description: 'Template to use Next.js with Firebase',
+  title: 'Daily-U : Daily Challenge Tracker',
+  description: 'Simplicity keeps you going',
 };
 
 // Root layout component for the application

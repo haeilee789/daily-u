@@ -18,7 +18,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="flex flex-wrap gap-6 justify-center items-center">
       {Array.isArray(projects) && projects.map(project => (
         <ProjectCard 
           key={project.id}

@@ -48,7 +48,6 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
   }
   const userEmail = user.email
 
-
   const handleTypeChange = (value : string) => {
     setType(value);
     // if (value =='checkbox') setCheckbox(true)
@@ -103,7 +102,7 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
             </label>
             <input 
                 type="text" 
-                id="name" 
+                id="projectName" 
                 className="shadow border rounded w-full py-2 px-3" 
                 placeholder="프로젝트 이름을 입력하쇼" 
                 value={projectName} 
@@ -112,12 +111,12 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
           </div>
           
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="goal" className="block text-gray-700 text-sm font-bold mb-2">
               프로젝트 목표
             </label>
             <input 
                 type="text" 
-                id="name" 
+                id="goal" 
                 className="shadow border rounded w-full py-2 px-3" 
                 placeholder="프로젝트 목표를 입력하쇼" 
                 value={goal} 
@@ -125,12 +124,12 @@ const CreateProject = ({ isOpen, onClose }:ModalProps) => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="date" className="block text-gray-700 text-sm font-bold mb-2">
               프로젝트 시작일 :  {new Date().toISOString().split('T')[0]}
             </label>
           </div>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="type" className="block text-gray-700 text-sm font-bold mb-2">
               태스크 타입
             </label>
             <RadioGroup defaultValue="text"
