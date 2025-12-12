@@ -4,7 +4,7 @@ import React from 'react';
 const NoProjectAlert = () => {
   return (
     <div className="w-full text-center p-10 border rounded-xl bg-white">
-        <p className="text-xl text-indigo-600">아직 등록된 프로젝트가 없습니다. 🚀</p>
+        <p className="text-xl text-indigo-600">Clear for today! 🚀</p>
     </div>
   );
 };

@@ -54,6 +54,8 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
 
   const handleForm = async (e:React.FormEvent) => {
     e.preventDefault() //기본폼 제출방지
+    
+    formData.isCompleted = true;
     const { result, error } = await UpdateAction(action.id, formData);
 
     if(error){

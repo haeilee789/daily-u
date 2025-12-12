@@ -78,7 +78,7 @@ function Page() {
         <p className="text-lg text-gray-500">Loading...</p>
           ) : (
           <div className="flex flex-wrap gap-6">
-          {projects.length === 0 ? (
+          {actions.length === 0 ? (
             <NoProjectAlert/>
           ) : (                  
             // <ProjectList projects={projects}/>

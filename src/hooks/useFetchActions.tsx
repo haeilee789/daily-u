@@ -4,20 +4,20 @@ import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase.js'; 
 import { Project, Action } from '@/types';
-import { getToday } from '@/lib/timeUtils';
+import { getToday, getTodayFB } from '@/lib/timeUtils';
 
 // 가정: 현재 인증된 사용자 정보와 인증 상태 로딩 여부를 인수로 받음
 export const useFetchActions = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
   const [actions, setActions] = useState<Action[]>([]);
   const [loadingActions, setLoadingActions] = useState(false);
   const [error, setError] = useState<Error | null>(null); // 오류 처리도 추가
-  const today = getToday();
+  const today = getTodayFB();
 
   useEffect(() => {
     if (authLoading) {
       return;
     }
-
+    console.log(today)
     setLoadingActions(true);
     setError(null);
 
@@ -33,7 +33,8 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
           collection(db, "Actions"),
           // where("userId", "==", user.email),
           where("isCompleted", "==", false),
-          // where("date", "==", today)
+          where("date", "==", today),
+          where("isCompleted", "==",false)
         );
 
         const querySnapshot = await getDocs(q);
