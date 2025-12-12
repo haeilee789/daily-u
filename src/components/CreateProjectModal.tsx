@@ -67,30 +67,49 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
       
       const collectionRef = collection(db, "Projects");
 
-      const newProjectRef = await addDoc(collectionRef, {
+      const newProject = {
         user: userEmail, 
         name: projectName,
-        goal:goal,
+        goal: goal,
         startDate: startDate,
         isCompleted:false,
         type:type
+      }
 
-      });
+      const newProjectRef = await addDoc(collectionRef, newProject);
 
-      const newProjectId = newProjectRef.id;
+      // const newProjectId = newProjectRef.id;
 
       const actionData = {
-        type: type,
+        type: newProject.type,
         content: "",
-        projectId: newProjectId,
+        name: newProject.name,
+        goal: newProject.goal,
+        projectId: newProjectRef.id,
         isCompleted: false, //cb일때 체크박스 상태용으로도 표시
         reason: "",
         date: startDate
       }
+
       console.log("Firestore 액션생성작업 시작...");
-      const { result, error } = await CreateAction(actionData);
+      // const { result, error } = await CreateAction(newProjectRef);
+
+      const connectionRefAction = collection(db, "Actions");
+      const newActionRef = await addDoc(connectionRefAction, {
+        type: actionData.type,
+        content: actionData.content,
+        name: actionData.name,
+        goal: actionData.goal,
+        projectId: actionData.projectId,
+        isCompleted: false, //cb일때 체크박스 상태용으로도 표시
+        reason: "",
+        date: newProject.startDate,
+        userId: userEmail
+      });
 
       console.log("await 완료, alert 직전")
+    
+      console.log( `액션 ID "${newActionRef.id}"가 성공적으로 생성되었습니다.`)
       alert("프로젝트가 성공적으로 추가되었습니다!");
       onCreated();
       onClose(); 

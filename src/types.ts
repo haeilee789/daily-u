@@ -2,8 +2,8 @@ import { Timestamp } from 'firebase/firestore';
 
 export interface Project {
     id: string;
-    name: string;
     userId: string;
+    name: string;
     goal: string;
     type: string;
     startDate: string; //Timestamp.now() from fb
@@ -14,6 +14,8 @@ export interface Project {
 export interface Action {
     id: string; 
 	  type: string;
+    name: string;
+    goal: string;
     content: string;
     projectId: string;
     isCompleted: boolean; //cb일때 체크박스 상태용으로도 표시

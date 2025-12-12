@@ -6,6 +6,7 @@ import { db } from '@/firebase/firebase.js';
 import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
 import { useAuthContext } from "@/context/AuthContext";
 import { useFetchProjects } from "@/hooks/useFetchProjects";
+
 import { useFetchActions } from "@/hooks/useFetchActions";
 import { getToday } from '@/lib/timeUtils'
 
@@ -21,7 +22,7 @@ function Page() {
   const { user, loading } = useAuthContext();  const router = useRouter();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { projects, loadingProjects, error } = useFetchProjects(user, loading, refreshTrigger);
-  const { actions, loadingActions, actionError } = useFetchActions(user, loading);
+  const { actions, loadingActions, actionE } = useFetchActions(user, loading, refreshTrigger);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const openActionModal = () => setIsActionModalOpen(true);
@@ -32,7 +33,7 @@ function Page() {
   const closeProjectModal = () => setIsProjectModalOpen(false);
   
   const handleProjectRefresh = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1); // 상태를 변경하여 useFetchProjects 재실행 유도
+    setRefreshTrigger(prev => prev + 1); // 
     console.log("프로젝트 목록 새로고침 신호 발생!");
   }, []);
 
@@ -71,14 +72,18 @@ function Page() {
         <p className="text-xl font-semibold mb-3">TODAY : {today}</p>
             
             
-        {loading || loadingProjects ? (
+        {/* {loading || loadingProjects ? ( */}
+        {loading || loadingProjects || loadingActions? (
+
         <p className="text-lg text-gray-500">Loading...</p>
           ) : (
           <div className="flex flex-wrap gap-6">
           {projects.length === 0 ? (
             <NoProjectAlert/>
           ) : (                  
-            <ProjectList projects={projects}/>
+            // <ProjectList projects={projects}/>
+            <ActionList actions={actions}/>
+
           )
         }
         </div>

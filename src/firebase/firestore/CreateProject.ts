@@ -50,7 +50,7 @@ export default async function CreateProject(
     console.log("await 완료, alert 직전")
 
     result = { 
-      message: `문서 ID "${newDocref.id}"가 성공적으로 생성되었습니다.`,
+      message: `프로젝트 ID "${newDocref.id}"가 성공적으로 생성되었습니다.`,
       docId: newDocref.id,
       updatedFields: newDocref
     };

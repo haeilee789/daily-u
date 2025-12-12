@@ -6,7 +6,7 @@ import { db } from '@/firebase/firebase.js';
 import { Project, Action } from '@/types';
 
 // 가정: 현재 인증된 사용자 정보와 인증 상태 로딩 여부를 인수로 받음
-export const useFetchProjects = (user: any | null, authLoading: boolean, refreshTrigger:boolean) => {
+export const useFetchProjects = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [error, setError] = useState<Error | null>(null); // 오류 처리도 추가
@@ -29,7 +29,8 @@ export const useFetchProjects = (user: any | null, authLoading: boolean, refresh
       try {
         const q = query(
           collection(db, "Projects"),
-          where("user", "==", user.email)
+          where("user", "==", user.email),
+          where("isCompleted", "==", false)
         );
 
         const querySnapshot = await getDocs(q);

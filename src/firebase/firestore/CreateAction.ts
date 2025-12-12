@@ -16,16 +16,19 @@ export default async function CreateAction(
     const newDocref = await addDoc(collectionRef, {
       type: formData.type,
       content: formData.content,
+      name: formData.name,
+      goal: formData.goal,
       projectId: formData.projectId,
       isCompleted: false, //cb일때 체크박스 상태용으로도 표시
       reason: "",
-      date: formData.startDate
+      date: formData.startDate,
+      userId: formData.userId
 
     });
     console.log("await 완료, alert 직전")
 
     result = { 
-      message: `문서 ID "${newDocref.id}"가 성공적으로 생성되었습니다.`,
+      message: `액션 ID "${newDocref.id}"가 성공적으로 생성되었습니다.`,
       docId: newDocref.id,
       updatedFields: newDocref
     };

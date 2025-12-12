@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ActionCard } from './ActionCard';
 import { Project, Action } from '@/types'
+import { ProjectCard } from './ProjectCard';
 
 
 
@@ -15,7 +16,6 @@ const ActionList = ({ actions }: ActionListProps) => {
   const openActionModal = (actionId: number | string) => {
     setSelectedActionId(actionId);
     setIsModalOpen(true);
-    // 상세 모달 로직...
   };
 
   return (

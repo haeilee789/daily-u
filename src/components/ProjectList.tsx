@@ -14,11 +14,11 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const openActionModal = (projectId: number | string) => {
     setSelectedProjectId(projectId);
     setIsModalOpen(true);
-    // 상세 모달 로직...
   };
 
   return (
     <div className="flex flex-wrap gap-6 justify-center items-center">
+      <p>Project List</p>
       {Array.isArray(projects) && projects.map(project => (
         <ProjectCard 
           key={project.id}
