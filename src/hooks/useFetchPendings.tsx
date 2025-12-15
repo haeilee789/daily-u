@@ -1,5 +1,4 @@
 // src/hooks/useFetchProjects.ts
-
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase.js'; 
@@ -7,9 +6,9 @@ import { Project, Action } from '@/types';
 import { getToday, getTodayFB } from '@/lib/timeUtils';
 
 // 가정: 현재 인증된 사용자 정보와 인증 상태 로딩 여부를 인수로 받음
-export const useFetchActions = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
-  const [actions, setActions] = useState<Action[]>([]);
-  const [loadingActions, setLoadingActions] = useState(false);
+export const useFetchPendings = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
+  const [pendings, setPendings] = useState<Action[]>([]);
+  const [loadingPendings, setLoadingPendings] = useState(false);
   const [error, setError] = useState<Error | null>(null); // 오류 처리도 추가
   const today = getTodayFB();
 
@@ -17,13 +16,13 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
     if (authLoading) {
       return;
     }
-    setLoadingActions(true);
+    setLoadingPendings(true);
     setError(null);
 
     const fetchActions = async () => {
       if (!user) {
-        setActions([]);
-        setLoadingActions(false);
+        setPendings([]);
+        setLoadingPendings(false);
         return;
       }
 
@@ -32,8 +31,7 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
           collection(db, "Actions"),
           where("userId", "==", user.email),
           where("isCompleted", "==", false),
-          where("date", "==", today),
-          where("isCompleted", "==",false)
+          // where("date", "==", today),
         );
 
         const querySnapshot = await getDocs(q);
@@ -43,14 +41,14 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
           ...doc.data() as Omit<Action, 'id'>
         }));
 
-        setActions(actionList);
+        setPendings(actionList);
 
       } catch (e) {
         console.error("프로젝트 조회 중 오류 발생:", e);
         setError(e as Error); // 오류 상태 저장
-        setActions([]);
+        setPendings([]);
       } finally {
-        setLoadingActions(false);
+        setLoadingPendings(false);
       }
     };
 
@@ -58,5 +56,5 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
   }, [user, authLoading, refreshTrigger]);
 
   // 필요한 상태와 값을 반환
-  return { actions, loadingActions, error }; 
+  return { pendings, loadingPendings, error }; 
 };

@@ -19,23 +19,20 @@ import { Checkbox } from "@/components/ui/checkbox"
 import UpdateAction from '@/firebase/firestore/UpdateAction';
 import { get } from 'http';
 
-
-
 interface ActionCardProps {
   action: Action; 
   openActionModal: (projectId: number | string) => void; 
 }
 
-export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
+export const PendingCard = ({ action, openActionModal }: ActionCardProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [ input, setInput ] = useState('');
   const [ isChecked, setIsChecked] = useState(false);
   const today = getToday();
 
-
   const [ formData, setFormData ] = useState({
     isCompleted: false,
-    id : action.id
+    id : action.id,
   })
   
   const handleDetailClick = () => {
@@ -54,9 +51,10 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
 
     } else{
       console.log("액션 업데이트 성공:", result);
-      alert("Action content successfully saved!!");
+      alert("Pending Action successfully cleared!!");
       setIsVisible(false);
     }
+
 }
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +74,8 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
   };
 
   if (!isVisible) {
-    return <div className="p-4 text-green-600"> {action.name} Completed for today! </div>;
+    // return <div className="p-4 text-green-600"> {action.name} Completed for today! </div>;
+    return null
   }
   return(
    
@@ -86,27 +85,14 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
         <ItemContent>
           <ItemHeader>{action.name} </ItemHeader>
           <ItemDescription>{action.goal}</ItemDescription>
+          <ItemDescription>{action.date}</ItemDescription>
+
         </ItemContent>
 
         <ItemActions>
-          {
-            action.type == "text" ? (
               <div>
-                <Input name="content" placeholder="Content" onChange={handleTextChange} />
+                <Input name="reason" placeholder="Reason" onChange={handleTextChange} />
               </div>
-            
-            ): (
-              <div> 
-                <Checkbox
-                  id="checkbox"
-                  name="isCompleted"
-                  onCheckedChange={handleCheckChange}
-                  checked={formData.isCompleted}
-                  className="data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600 data-[state=checked]:text-white dark:data-[state=checked]:border-blue-700 dark:data-[state=checked]:bg-blue-700"
-                />
-              </div>
-            )
-          }
 
         </ItemActions>
           <Button type="submit">Save</Button>

@@ -15,7 +15,8 @@ import NoProjectAlert from "@/components/NoProjectAlert";
 import ProjectList from "@/components/ProjectList";
 import SignOutButton from "@/components/signOut";
 import ActionList from "@/components/ActionList";
-
+import PendingList from "@/components/PendingList";
+import { useFetchPendings } from "@/hooks/useFetchPendings";
 
 function Page() {
   const today = getToday();
@@ -23,6 +24,7 @@ function Page() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { projects, loadingProjects, error } = useFetchProjects(user, loading, refreshTrigger);
   const { actions, loadingActions, actionE } = useFetchActions(user, loading, refreshTrigger);
+  const { pendings, loadingPendings, pendingE } = useFetchPendings(user, loading, refreshTrigger);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const openActionModal = () => setIsActionModalOpen(true);
@@ -61,10 +63,24 @@ function Page() {
       </div>
            
       <div className="flex justify-between items-center space-x-6">
-      {/* 덩어리 1 */}
         <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-          <p className="text-xl font-semibold mb-3">YESTERDAY</p>
-          <p className="text-sm text-gray-500 mb-4">Cherry space</p>
+          <p className="text-xl font-semibold mb-3">Pending Tasks</p>
+          <p> Logs for Missed Actions</p>
+          {loading || loadingProjects || loadingPendings? (
+
+          <p className="text-lg text-gray-500">Loading...</p>
+            ) : (
+            <div className="flex flex-wrap gap-6">
+            {pendings.length === 0 ? (
+              <NoProjectAlert/>
+            ) : (                  
+              <PendingList actions={pendings}/>
+
+            )
+          }
+          </div>
+          )}
+
       </div>
           
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
