@@ -31,7 +31,7 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
       try {
         const q = query(
           collection(db, "Actions"),
-          // where("userId", "==", user.email),
+          where("userId", "==", user.email),
           where("isCompleted", "==", false),
           where("date", "==", today),
           where("isCompleted", "==",false)

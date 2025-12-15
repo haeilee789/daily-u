@@ -22,19 +22,9 @@ import { get } from 'http';
 
 
 interface ActionCardProps {
-  action: Action; // 개별 프로젝트 객체
-  openActionModal: (projectId: number | string) => void; // 모달을 여는 함수 (id를 전달하도록 수정)
-
-  
+  action: Action; 
+  openActionModal: (projectId: number | string) => void; 
 }
-
-// export default async function updateAction(
-//   collection: string,
-//   id: string,
-//   data: any
-// )
-
-
 
 export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -59,34 +49,17 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
     const { result, error } = await UpdateAction(action.id, formData);
 
     if(error){
-      console.error("액션 업데이트 실패:", error);
+      console.error("Failed to save the action:", error);
       alert(`저장 실패: ${error}`);
+
     } else{
       console.log("액션 업데이트 성공:", result);
-      alert("성공적으로 저장되었습니다!");
+      alert("Action content successfully saved!!");
       setIsVisible(false);
     }
 
     
 }
-//  const handleChange = (e : any) => {
-  
-//     const { name, value, type, checked } = e.target;
-    
-//     // 체크박스인 경우 checked 값을 사용하고, 아니면 value를 사용
-//     const finalValue = name === 'checkbox' ? checked : value;
-
-//     if( name === '' ) {
-//       formData.isCompleted = false
-//     } else {
-//       formData.isCompleted = true
-//     }
-
-//     setFormData(prevData => ({
-//       ...prevData,
-//       [name]: finalValue, // [name] : 동적 키(Dynamic Key) 사용
-//     }));
-//   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -105,19 +78,10 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
   };
 
   if (!isVisible) {
-    // 성공 메시지를 보여주고 싶다면 여기에 간단한 '성공' 메시지를 리턴할 수도 있습니다.
-    return <div className="p-4 text-green-600">등록/수정 완료!</div>;
+    return <div className="p-4 text-green-600"> {action.name} Completed for today! </div>;
   }
   return(
-    // <div className="w-auto p-2 flex flex-wrap gap-6 justify-center border rounded-xl shadow-md items-center">
-      //  <h3 className="text-l font-bold mb-3 text-gray-800 items-center">project Name : {project.name}</h3>
-      // <h3 className="text-l font-bold mb-3 text-gray-800 items-center">project Goal : {project.goal}</h3> 
-
-        // <button 
-        // onClick={handleDetailClick} 
-        // className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150"          >
-        // 저장
-    //  </button> 
+   
   <div className="flex w-full max-w-md flex-col gap-6 justify-flex items-center">
     <form onSubmit={handleForm} >
       <Item variant="outline">

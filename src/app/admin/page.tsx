@@ -38,15 +38,14 @@ function Page() {
   }, []);
 
   const handleProjectCreationSuccess = () => {
-      closeProjectModal();        // 모달 닫기
-      handleProjectRefresh();     // 새로고침 함수 호출
+      closeProjectModal();        
+      handleProjectRefresh();    
   };
 
   useEffect(() => {
     if (user == null) {
       router.push("/");
     }
-    // }, [ user ] );
   }, [user, router]); 
   
   return (
@@ -92,7 +91,7 @@ function Page() {
         <button 
           onClick={openProjectModal} 
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150"          >
-          프로젝트 추가
+          New Project
         </button>
       </div>  
 
@@ -103,6 +102,7 @@ function Page() {
 
           {isActionModalOpen && <EditAction onClose={closeActionModal} />}
           {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
+
           {isProjectModalOpen && (
             <CreateProjectModal 
                 isOpen={isProjectModalOpen} 
