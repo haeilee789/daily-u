@@ -1,6 +1,6 @@
 // src/hooks/useFetchProjects.ts
 import { useState, useEffect } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase.js'; 
 import { Project, Action } from '@/types';
 import { getToday, getTodayFB } from '@/lib/timeUtils';
@@ -29,9 +29,10 @@ export const useFetchPendings = (user: any | null, authLoading: boolean, refresh
       try {
         const q = query(
           collection(db, "Actions"),
-          where("userId", "==", user.email),
           where("isCompleted", "==", false),
-          // where("date", "==", today),
+          where("userId", "==", user.email),
+          where("date", "!=", today),
+          orderBy("date")
         );
 
         const querySnapshot = await getDocs(q);

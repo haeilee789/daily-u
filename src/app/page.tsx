@@ -1,9 +1,25 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link';
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation";
+import { useAuth } from '@/hooks/useAuth';
+
 
 export default function Home() {
+  const router = useRouter();
+  const { signIn, loading, user } = useAuth(); 
 
+  const DemoSignIn = async () => {
+    try {
+      await signIn('daily.u.demo@gmail.com', 'dailyudemo1!');
+      router.push("/admin");
+
+    } catch (error) {
+      console.error('로그인 실패:', error);
+    }
+  }
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-56">
       {/* <h1> hello world!</h1>
@@ -19,8 +35,8 @@ export default function Home() {
         </h1>
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
 
-        <Button asChild variant="destructive" size="lg">
-          <Link href="/signin">Demo</Link>
+        <Button onClick={DemoSignIn} asChild variant="destructive" size="lg">
+          <p>DEMO</p>
         </Button>
 
         <Button asChild variant="outline" size="lg">
