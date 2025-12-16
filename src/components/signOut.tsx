@@ -26,12 +26,14 @@ const SignOutButton = () => {
   return (
     <button 
         onClick={handleSignOut} 
-        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150"          >
+        className="bg-[#F9DFDF] hover:bg-[#F5AFAF] text-[#7D7373] font-bold py-2 px-4 rounded transition duration-150"          >
         Sign Out
     </button>
   );
 };
-
+{/* <Button onClick={DemoSignIn} size="lg" className={"bg-[#F9DFDF] hover:bg-[#F5AFAF] transition-colors duration-150"}>
+          <p className="text-[#4B4444]">DEMO</p>
+        </Button> */}
 export default SignOutButton;
 
 

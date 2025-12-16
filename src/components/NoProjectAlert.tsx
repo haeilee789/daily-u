@@ -1,10 +1,10 @@
 import React from 'react';
 
-
+// flex flex-col items-center
 const NoProjectAlert = () => {
   return (
-    <div className="w-full text-center p-10 border rounded-xl bg-white">
-        <p className="text-xl text-indigo-600">Clear for today! 🚀</p>
+    <div className="w-full text-center p-5 border rounded-xl bg-white m-3 ">
+        <p className="text-xl text-[#E58E8E] ">Clear for today! 🚀</p>
     </div>
   );
 };

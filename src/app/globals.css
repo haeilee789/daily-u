@@ -124,12 +124,19 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
-
+html, body {
+  background-color: #FCF8F8; /* 배경색을 아예 기본값으로 지정 */
+  margin: 0;
+  padding: 0;
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button {
+    @apply bg-[#F9DFDF] hover:bg-[#F5AFAF] text-[#7D7373] font-bold py-2 px-4 rounded transition duration-150;
   }
 }
