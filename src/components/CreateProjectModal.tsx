@@ -57,7 +57,7 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
     e.preventDefault()
     console.log("handling the save");
       if (!projectName) { 
-      alert("프로젝트 이름을 입력하세요.");
+      alert("Enter your project name.");
       return; 
     } 
 
@@ -77,7 +77,6 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
 
       const newProjectRef = await addDoc(collectionRef, newProject);
 
-      // const newProjectId = newProjectRef.id;
 
       const actionData = {
         type: newProject.type,
@@ -91,7 +90,6 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
       }
 
       console.log("Firestore 액션생성작업 시작...");
-      // const { result, error } = await CreateAction(newProjectRef);
 
       const connectionRefAction = collection(db, "Actions");
       const newActionRef = await addDoc(connectionRefAction, {
@@ -173,11 +171,11 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="text" id="text" />
-                <Label htmlFor="text">Text Input</Label>
+                <Label htmlFor="text"> Text Input</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="checkbox" id="checkbox" />
-                <Label htmlFor="checkbox">Checkbox</Label>
+                <Label htmlFor="checkbox">Check box</Label>
               </div>
               
             </RadioGroup>
@@ -187,13 +185,13 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
             <button 
               type="button" 
               onClick={onClose}
-              className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
+              className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              // className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
               Save
             </button>

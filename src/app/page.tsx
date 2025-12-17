@@ -21,29 +21,31 @@ export default function Home() {
     }
   }
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-around p-5 bg-[#FCF8F8]">
+    <main className="flex min-h-screen w-full flex-col items-center justify-around p-5 bg-[#FCF8F8] gap-2">
 
-      <div className="flex flex-col items-center justify-around gap-3">
+      <div className="flex flex-col items-center justify-around">
         <h1 className="text-[#F5AFAF] 
         text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
         font-extrabold                        /* 굵기: 800 (아주 굵게) */
         leading-none                          /* 행간: 좁게 (가장 좁게) */
-        tracking-tight mb-4">           
+        tracking-tight mb-2  drop-shadow-md">           
               
       DAILY-U        </h1>
 
-      <h1 className="
-        text-l sm:text-xl lg:text-2xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
-        leading-none                          /* 행간: 좁게 (가장 좁게) */
-        text-[#7D7373] text-center mb-1
-    
-      ">A Personalized Daily Challenge Tracker</h1>
-      <p className="text-center">Made by Haeilee under SPF principle 
-      <p className="text-center">that she found important in successful project </p></p>
+     
+      </div>
+
+      <div>
+        <h1 className="
+          text-l sm:text-xl lg:text-2xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
+          leading-none                          /* 행간: 좁게 (가장 좁게) */
+          text-[#7D7373] text-center mb-6 drop-shadow-md
+      
+        ">A Personalized Daily Challenge Tracker</h1>
+        <p className="text-center "> built with with SPF principles <br />for successful habit building, <br /> Made by Haeilee</p>
+        {/* <p className="text-center"> </p> */}
 
       </div>
-        
-
       <div className="justify-center items-center">
 
         <p className="text-center"

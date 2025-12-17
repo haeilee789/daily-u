@@ -12,29 +12,6 @@ export default async function CreateProject(
   try {
     console.log("저장 시작");
     
-    //  try {
-    //       const projectsCollectionRef = collection(db, "Projects");
-    
-    //       await addDoc(projectsCollectionRef, {
-    //         user: userEmail, 
-    //         name: projectName,
-    //         goal:goal,
-    //         startDate: startDate,
-    //         isCompleted:false,
-    //         type:type
-    
-    //       });
-    //       console.log("await 완료, alert 직전")
-    //       alert("프로젝트가 성공적으로 추가되었습니다!");
-    //       onClose(); 
-    
-          
-    //     } catch (error) {
-          
-    //       console.error("문서 작성 중 오류 발생:", error);
-    //       alert("데이터베이스 저장에 실패했습니다.");
-    //     } 
-
 
     const projectsCollectionRef = collection(db, "Projects");
 

@@ -80,7 +80,7 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
   }
   return(
    
-    <form onSubmit={handleForm} className='justify-between' >
+    <form onSubmit={handleForm} className='flex flex-col gap-2 mb-2 mt-2' >
       <Item variant="outline">
         <ItemContent>
           <ItemHeader>{action.name} </ItemHeader>

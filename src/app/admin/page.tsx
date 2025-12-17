@@ -53,8 +53,8 @@ function Page() {
   }, [user, router]); 
   
   return (
-    <div className="container mx-auto bg-[#FCF8F8]">
-      <div className="flex justify-center items-center">
+    <div className="container mx-auto bg-[#FCF8F8] items-start">
+      <div className="flex justify-center items-center mb-4">
         <h1 className="text-[#F5AFAF] 
           text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
           font-semibold                        /* 굵기: 800 (아주 굵게) */
@@ -64,7 +64,7 @@ function Page() {
         </h1> 
       </div>
            
-      <div className="flex justify-between items-center space-x-6">
+      <div className="flex justify-between items-start space-x-6 gap-2">
         <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-xl font-semibold text-[#434242]">Pending Tasks</p>
           <p className="font-light text-gray-500"> Add logs for missed actions</p>
@@ -106,10 +106,22 @@ function Page() {
         </div>
         )}
       
+      
+      <div>
+        {projects.length === 3? (
+          <p></p>
+        ): (
         <button className="mt-3"
           onClick={openProjectModal} >
           New Project
-        </button>
+        </button>        
+      )}
+      </div>
+      {/* <button className="mt-3"
+        onClick={openProjectModal} >
+        New Project
+      </button> */}
+
       </div>  
 
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
