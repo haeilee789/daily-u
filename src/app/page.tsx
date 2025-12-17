@@ -62,14 +62,14 @@ export default function Home() {
         <Button onClick={DemoSignIn} size="lg" className={"bg-[#F9DFDF] hover:bg-[#F5AFAF] transition-colors duration-150"}>
           <p className="text-[#4B4444]">DEMO</p>
         </Button>
-
+{/* 
         <Button asChild variant="outline" size="lg">
           <Link href="/signin">Sign In</Link>
         </Button>
 
         <Button asChild variant="outline" size="lg">
           <Link href="/signup">Sign Up</Link>
-        </Button>
+        </Button> */}
 
         
       </div>

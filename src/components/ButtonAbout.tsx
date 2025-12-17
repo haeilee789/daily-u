@@ -36,10 +36,9 @@ const ButtonAbout = () => {
 
             {/* 텍스트 섹션 */}
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-800">프로젝트 타이틀</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Coming soon</h2>
               <p className="text-gray-600 mt-2 leading-relaxed text-left">
-                여기에 프로젝트에 대한 설명을 적으시면 됩니다. 
-                글자와 사진이 조화롭게 배치되도록 설계되었습니다.
+                Today's Action: Today Only
               </p>
 
               {/* 하단 버튼 영역 */}
