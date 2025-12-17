@@ -18,6 +18,7 @@ import ActionList from "@/components/ActionList";
 import PendingList from "@/components/PendingList";
 import { useFetchPendings } from "@/hooks/useFetchPendings";
 import ButtonProjectSettings from "@/components/ButtonProjectSettings";
+import ButtonAbout from "@/components/ButtonAbout";
 
 function Page() {
   const today = getToday();
@@ -93,7 +94,7 @@ function Page() {
 
         <p className="text-lg text-gray-500">Loading...</p>
           ) : (
-          <div className="flex flex-wrap gap-4 ">
+          <div className="flex items-center justify-center ">
           {actions.length === 0 ? (
             <NoProjectAlert/>
           ) : (                  
@@ -113,6 +114,7 @@ function Page() {
 
       <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
         <p className="text-xl font-semibold mb-3 text-[#434242] tracking-tight">Settings</p>
+        <ButtonAbout/>
         <SignOutButton/>
         <ButtonProjectSettings/>
       </div>

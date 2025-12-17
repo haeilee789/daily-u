@@ -19,8 +19,7 @@ const ActionList = ({ actions }: ActionListProps) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
-      {/* <p>Action List</p> */}
+    <div>
       {Array.isArray(actions) && actions.map(action => (
         <ActionCard 
           key={action.id}

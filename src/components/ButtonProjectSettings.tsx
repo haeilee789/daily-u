@@ -13,7 +13,6 @@ const ButtonProjectSettings = () => {
     }
   };
 
-  // 사용자가 로그인 상태일 때만 버튼을 보여줍니다.
   if (!user) {
     return null;
   }
