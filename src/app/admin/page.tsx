@@ -1,175 +1,32 @@
 'use client'
-import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useState } from 'react';
-import { collection, addDoc, query, where, getDocs, orderBy} from "firebase/firestore";
-import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
-// import EditModal from '@/components/EditModal.jsx';
-import useAuth from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
+import { useEffect, useState, useCallback } from "react";
+import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
+import { db } from '@/firebase/firebase.js'; 
+import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
+import { useAuthContext } from "@/context/AuthContext";
+import { useFetchProjects } from "@/hooks/useFetchProjects";
 
+import { useFetchActions } from "@/hooks/useFetchActions";
+import { getToday } from '@/lib/timeUtils'
 
-interface EditProjectModalProps {
-  onClose: () => void; // 모달을 닫는 함수 (필수)
-  // title?: string;    // 만약 optional한 string 타입의 title을 추가하고 싶다면 이렇게 정의합니다.
-}
-
-function CreateProject({ onClose }: EditProjectModalProps) {
-  const [projectName, setProjectName] = useState('');
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]); // 오늘 날짜로 초기화x
-  const { user, loading } = useAuth();
-  const handleSave = async (e: React.FormEvent) => {
-    console.log(db);
-    e.preventDefault(); 
-    
-    // 로딩 중이거나 사용자가 없으면 저장 중단
-    if (loading) return;
-    if (!user) {
-      alert("로그인이 필요합니다. 프로젝트를 저장할 수 없습니다.");
-      return; 
-    }
-    const currentUserId = user.uid;
-
-    if (!projectName) { 
-      alert("프로젝트 이름을 입력하세요.");
-      return; 
-    }
-    try {
-      console.log("저장 시작");
-      const projectsCollectionRef = collection(db, "Projects");
-
-      await addDoc(projectsCollectionRef, {
-        name: projectName,
-        startDate: startDate,
-        userId: currentUserId, // <--- 🔑 useAuth에서 가져온 ID 사용
-        createdAt: new Date(),
-      });
-      console.log("await 완료, alert 직전")
-      alert("프로젝트가 성공적으로 추가되었습니다!");
-      onClose(); 
-
-      
-    } catch (error) {
-      console.error("문서 작성 중 오류 발생:", error);
-      alert("데이터베이스 저장에 실패했습니다.");
-    } 
-  };
-
-  return (
-    // 전체 컨테이너: 화면 전체에 고정(fixed), 중앙 정렬
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      
-      {/* 오버레이 (배경 흐림 효과) */}
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-        onClick={onClose} // 배경 클릭 시 닫기
-      ></div>
-
-      {/* 모달 내용 (Content) */}
-      <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full relative z-10">
-        
-        <h2 className="text-2xl font-bold mb-4">프로젝트 생성</h2>
-        
-        {/* 수정 폼 필드 예시 */}
-        <form onSubmit={handleSave}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-              프로젝트 이름
-            </label>
-            <input 
-                type="text" 
-                id="name" 
-                className="shadow border rounded w-full py-2 px-3" 
-                placeholder="프로젝트 이름을 입력하세요" 
-                value={projectName} 
-                onChange={(e) => setProjectName(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex justify-end space-x-3 mt-6">
-            <button 
-              type="button" 
-              onClick={onClose}
-              className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
-            >
-              취소
-            </button>
-            <button 
-              type="submit" 
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              저장
-            </button>
-          </div>
-          
-        </form>
-        
-      </div>
-    </div>
-  );
-}
-
-function EditAction({ onClose }: { onClose: () => void }) {
-  // 모달 내의 상태 관리 (예: 입력 필드 값)는 여기에 추가됩니다.
-  const [projectName, setProjectName] = useState(''); 
-  
-  return (
-    // 전체 컨테이너: 화면 전체에 고정(fixed), 중앙 정렬
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      
-      {/* 오버레이 (배경 흐림 효과) */}
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-        onClick={onClose} // 배경 클릭 시 닫기
-      ></div>
-
-      {/* 모달 내용 (Content) */}
-      <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full relative z-10">
-        
-        <h2 className="text-2xl font-bold mb-4">액션 정보 수정</h2>
-        
-        {/* 수정 폼 필드 예시 */}
-        <form>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-              액션 이름
-            </label>
-            <input 
-                type="text" 
-                id="name" 
-                className="shadow border rounded w-full py-2 px-3" 
-                placeholder="액션 내용을 입력하세요" 
-            />
-          </div>
-          
-          <div className="flex justify-end space-x-3 mt-6">
-            <button 
-              type="button" 
-              onClick={onClose}
-              className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
-            >
-              취소
-            </button>
-            <button 
-              type="submit" 
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              저장
-            </button>
-          </div>
-          
-        </form>
-        
-      </div>
-    </div>
-  );
-}
+import CreateProjectModal from "@/components/CreateProjectModal";
+import NoProjectAlert from "@/components/NoProjectAlert";
+import ProjectList from "@/components/ProjectList";
+import SignOutButton from "@/components/signOut";
+import ActionList from "@/components/ActionList";
+import PendingList from "@/components/PendingList";
+import { useFetchPendings } from "@/hooks/useFetchPendings";
+import ButtonProjectSettings from "@/components/ButtonProjectSettings";
+import ButtonAbout from "@/components/ButtonAbout";
 
 function Page() {
-  // Access the user object from the authentication context
-  // const { user } = useAuthContext();
-  const { user } = useAuthContext() as { user: any }; // Use 'as' to assert the type as { user: any }
-  const router = useRouter();
+  const today = getToday();
+  const { user, loading } = useAuthContext();  const router = useRouter();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const { projects, loadingProjects, projectError } = useFetchProjects(user, loading, refreshTrigger);
+  const { actions, loadingActions, actionError } = useFetchActions(user, loading, refreshTrigger);
+  const { pendings, loadingPendings, pendingError } = useFetchPendings(user, loading, refreshTrigger);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const openActionModal = () => setIsActionModalOpen(true);
@@ -178,147 +35,113 @@ function Page() {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
-
-// 🔑 1. 프로젝트 목록을 저장할 상태
-  const [projects, setProjects] = useState<any[]>([]); 
-  const [loadingProjects, setLoadingProjects] = useState(true);
-
-  // 2. 인증 상태 가져오기
-  const { loading: loadingAuth } = useAuth();
   
+  const handleProjectRefresh = useCallback(() => {
+    setRefreshTrigger(prev => prev + 1); // 
+    console.log("프로젝트 목록 새로고침 신호 발생!");
+  }, []);
+
+  const handleProjectCreationSuccess = () => {
+      closeProjectModal();        
+      handleProjectRefresh();    
+  };
+
   useEffect(() => {
-    // 인증 로딩 중이면 기다립니다.
-    if (loadingAuth) return;
-
-    setLoadingProjects(true);
-
-    const fetchProjects = async () => {
-      // 🚨 사용자가 로그인하지 않았으면 종료
-      if (!user) {
-        setProjects([]);
-        setLoadingProjects(false);
-        return;
-      }
-
-      try {
-        // Firestore 쿼리 정의: Projects 컬렉션에서 userId가 현재 사용자의 uid와 일치하는 문서만 조회
-        const q = query(
-          collection(db, "Projects"),
-          where("userId", "==", user.uid)
-        );
-
-        // 쿼리 실행
-        const querySnapshot = await getDocs(q);
-        
-        // 결과 처리: 문서 ID와 데이터를 포함하여 배열로 저장
-        const projectsList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        setProjects(projectsList);
-
-      } catch (error) {
-        console.error("프로젝트 조회 중 오류 발생:", error);
-      } finally {
-        setLoadingProjects(false);
-      }
-    };
-
-    fetchProjects();
-  }, [user, loadingAuth]); // 🔑 user나 인증 상태가 변할 때마다 다시 실행
-
-  
-  useEffect(() => {
-    // Redirect to the home page if the user is not logged in
     if (user == null) {
       router.push("/");
     }
-    // }, [ user ] );
-  }, [user, router]); // Include 'router' in the dependency array to resolve eslint warning
-
+  }, [user, router]); 
+  
   return (
-    <div>
-    <h1>Your Daily Challenges</h1>
-      <div className="flex justify-between space-x-6">
-      {/* 덩어리 1 */}
-      {/* <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        <p className="text-xl font-semibold mb-3">YESTERDAY</p>
-        <p className="text-sm text-gray-500 mb-4">Cherry space</p>
-      </div> */}
-
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        {loadingAuth || loadingProjects ? (
-      <p className="text-lg text-gray-500">데이터를 불러오는 중입니다...</p>
-    ) : (
-      
-      // 🔑 프로젝트 목록 표시
-      <div className="flex flex-wrap gap-6">
-        
-        {projects.length === 0 ? (
-          <div className="w-full text-center p-10 border rounded-xl bg-white">
-            <p className="text-xl text-indigo-600">아직 등록된 프로젝트가 없습니다. 🚀</p>
-            <button 
-            onClick={openActionModal} 
-            className="mt-4 bg-indigo-500 text-white p-2 rounded">
-              새 프로젝트 추가
-            </button>
-          </div>
-        ) : (
-          
-          // 조회된 프로젝트를 반복하여 덩어리(카드)로 보여줍니다.
-          projects.map(project => (
-            <div 
-              key={project.id} 
-              className="w-80 p-6 border rounded-xl shadow-lg bg-white transform hover:shadow-xl transition"
-            >
-              <h3 className="text-2xl font-bold mb-3 text-gray-800">{project.name}</h3> {/* 🔑 프로젝트 이름 */}
-              <p className="text-sm text-gray-500 mb-4">시작일: {project.startDate}</p>
-              
-              {/* 여기에 할 일 목록 등의 추가 정보가 들어갑니다 */}
-
-              <button 
-                onClick={openActionModal} 
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded mt-4"
-              >
-                상세 보기 / 수정
-              </button>
-            </div>
-          ))
-        )}
-        
+    <div className="container mx-auto bg-[#FCF8F8] items-start">
+      <div className="flex justify-center items-center mb-4">
+        <h1 className="text-[#F5AFAF] 
+          text-5xl sm:text-7xl lg:text-8xl      /* 반응형 크기: 5xl -> 7xl -> 8xl */
+          font-semibold                        /* 굵기: 800 (아주 굵게) */
+          leading-none                          /* 행간: 좁게 (가장 좁게) */
+          tracking-tight mb-4 ">                 
+          DAILY-U
+        </h1> 
       </div>
-    )}
-      </div>
-        
-      {/* 덩어리 2 */}
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        <p className="text-xl font-semibold mb-3">TODAY</p>
-           {/* <button 
-            onClick={openActionModal} 
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded transition duration-150"
-          >
-            프로젝트 A : 액션 정보 수정
-          </button> */}
            
+      <div className="flex justify-between items-start space-x-6 gap-2">
+        <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
+          <p className="text-xl font-semibold text-[#434242]">Pending Tasks</p>
+          <p className="font-light text-gray-500"> Add logs for missed actions</p>
+          {loading || loadingProjects || loadingPendings? (
 
-        <button 
-            onClick={openProjectModal} 
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150"          >
-            프로젝트 추가
-          </button>
+          <p className="text-lg text-gray-500">Loading...</p>
+            ) : (
+            <div className="flex flex-wrap gap-6">
+            {pendings.length === 0 ? (
+              <NoProjectAlert/>
+            ) : (                  
+              <PendingList actions={pendings}/>
+
+            )
+          }
+          </div>
+          )}
+
       </div>
+          
+      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white gap-4">
+        <p className="text-xl font-semibold mb-3 text-[#434242]">TODAY : {today}</p>
+            
+            
+        {/* {loading || loadingProjects ? ( */}
+        {loading || loadingProjects || loadingActions? (
+
+        <p className="text-lg text-gray-500">Loading...</p>
+          ) : (
+          <div className="flex items-center justify-center ">
+          {actions.length === 0 ? (
+            <NoProjectAlert/>
+          ) : (                  
+            // <ProjectList projects={projects}/>
+            <ActionList actions={actions}/>
+
+          )
+        }
+        </div>
+        )}
       
-      {/* 덩어리 3 */}
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white">
-        <p className="text-xl font-semibold mb-3">Tomorrow</p>
-        <p className="text-sm text-gray-500 mb-4">Cherry space</p>
-        
+      
+      <div>
+        {projects.length === 3? (
+          <p></p>
+        ): (
+        <button className="mt-3"
+          onClick={openProjectModal} >
+          New Project
+        </button>        
+      )}
       </div>
-      {isActionModalOpen && <EditAction onClose={closeActionModal} />}
-      {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />}
+      {/* <button className="mt-3"
+        onClick={openProjectModal} >
+        New Project
+      </button> */}
 
-    </div>
+      </div>  
+
+      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
+        <p className="text-xl font-semibold mb-3 text-[#434242] tracking-tight">Settings</p>
+        <ButtonAbout/>
+        <SignOutButton/>
+        <ButtonProjectSettings/>
+      </div>
+
+          {/* {isActionModalOpen && <EditAction onClose={closeActionModal} />} */}
+          {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
+
+          {isProjectModalOpen && (
+            <CreateProjectModal 
+                isOpen={isProjectModalOpen} 
+                onClose={closeProjectModal} 
+                onCreated={handleProjectCreationSuccess} // ✅ 새로고침 로직이 포함된 함수 전달
+            />
+        )}
+      </div>
     </div>
   );
 }

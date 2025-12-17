@@ -13,6 +13,7 @@ export default async function signUp(email: string, password: string) {
     result = await createUserWithEmailAndPassword(auth, email, password); // Create a new user with email and password
   } catch (e) {
     error = e; // Catch and store any error that occurs during sign-up
+    console.log(e)
   }
 
   return { result, error }; // Return the sign-up result and error (if any)
