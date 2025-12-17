@@ -16,7 +16,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void; 
   onCreated: () => void;  
-  children: React.ReactNode;
+  // children: React.ReactNode;
 }
 
 const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {

@@ -80,12 +80,11 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
   }
   return(
    
-  <div className="flex w-full max-w-md flex-col gap-6 justify-flex items-center">
     <form onSubmit={handleForm} >
       <Item variant="outline">
         <ItemContent>
           <ItemHeader>{action.name} </ItemHeader>
-          <ItemDescription>{action.goal}</ItemDescription>
+          <ItemDescription className="text-left">{action.goal}</ItemDescription>
         </ItemContent>
 
         <ItemActions>
@@ -102,19 +101,18 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
                   name="isCompleted"
                   onCheckedChange={handleCheckChange}
                   checked={formData.isCompleted}
-                  className="data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600 data-[state=checked]:text-white dark:data-[state=checked]:border-blue-700 dark:data-[state=checked]:bg-blue-700"
+                  className="data-[state=checked]:border-[#F9DFDF] data-[state=checked]:bg-[#F2B2B2] data-[state=checked]:text-white dark:data-[state=checked]:border-[#7D7373] dark:data-[state=checked]:bg-[#7D7373]"
                 />
               </div>
             )
           }
 
         </ItemActions>
-          <Button type="submit">Save</Button>
+          <Button className='bg-[#7D7373]' type="submit">Save</Button>
 
       </Item>
     </form>
     
-  </div>
 
     );
   }

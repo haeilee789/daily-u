@@ -10,7 +10,7 @@ import { getToday, getTodayFB } from '@/lib/timeUtils';
 export const useFetchActions = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
   const [actions, setActions] = useState<Action[]>([]);
   const [loadingActions, setLoadingActions] = useState(false);
-  const [error, setError] = useState<Error | null>(null); // 오류 처리도 추가
+  const [actionError, setActionError] = useState<Error | null>(null); // 오류 처리도 추가
   const today = getTodayFB();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
       return;
     }
     setLoadingActions(true);
-    setError(null);
+    setActionError(null);
 
     const fetchActions = async () => {
       if (!user) {
@@ -47,7 +47,7 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
 
       } catch (e) {
         console.error("프로젝트 조회 중 오류 발생:", e);
-        setError(e as Error); // 오류 상태 저장
+        setActionError(e as Error); // 오류 상태 저장
         setActions([]);
       } finally {
         setLoadingActions(false);
@@ -58,5 +58,5 @@ export const useFetchActions = (user: any | null, authLoading: boolean, refreshT
   }, [user, authLoading, refreshTrigger]);
 
   // 필요한 상태와 값을 반환
-  return { actions, loadingActions, error }; 
+  return { actions, loadingActions, actionError }; 
 };

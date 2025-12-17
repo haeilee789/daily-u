@@ -55,7 +55,7 @@ export const ProjectCard = ({ project, openActionModal }: ProjectCardProps) => {
   const handleForm = async (e:React.FormEvent) => {
     e.preventDefault() //기본폼 제출방지
     // UpdateAction(project.id, formData, today)
-    const { result, error } = await UpdateAction(project.id, formData, today);
+    const { result, error } = await UpdateAction(project.id, formData);
 
     if(error){
       console.error("액션 업데이트 실패:", error);

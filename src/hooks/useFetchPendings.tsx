@@ -9,7 +9,7 @@ import { getToday, getTodayFB } from '@/lib/timeUtils';
 export const useFetchPendings = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
   const [pendings, setPendings] = useState<Action[]>([]);
   const [loadingPendings, setLoadingPendings] = useState(false);
-  const [error, setError] = useState<Error | null>(null); // 오류 처리도 추가
+  const [pendingError, setPendingError] = useState<Error | null>(null); // 오류 처리도 추가
   const today = getTodayFB();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export const useFetchPendings = (user: any | null, authLoading: boolean, refresh
       return;
     }
     setLoadingPendings(true);
-    setError(null);
+    setPendingError(null);
 
     const fetchActions = async () => {
       if (!user) {
@@ -45,8 +45,8 @@ export const useFetchPendings = (user: any | null, authLoading: boolean, refresh
         setPendings(actionList);
 
       } catch (e) {
-        console.error("프로젝트 조회 중 오류 발생:", e);
-        setError(e as Error); // 오류 상태 저장
+        console.error("펜딩 액션 조회 중 오류 발생:", e);
+        setPendingError(e as Error); // 오류 상태 저장
         setPendings([]);
       } finally {
         setLoadingPendings(false);
@@ -57,5 +57,5 @@ export const useFetchPendings = (user: any | null, authLoading: boolean, refresh
   }, [user, authLoading, refreshTrigger]);
 
   // 필요한 상태와 값을 반환
-  return { pendings, loadingPendings, error }; 
+  return { pendings, loadingPendings, pendingError }; 
 };

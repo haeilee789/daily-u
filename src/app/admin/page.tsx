@@ -23,9 +23,9 @@ function Page() {
   const today = getToday();
   const { user, loading } = useAuthContext();  const router = useRouter();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const { projects, loadingProjects, error } = useFetchProjects(user, loading, refreshTrigger);
-  const { actions, loadingActions, actionE } = useFetchActions(user, loading, refreshTrigger);
-  const { pendings, loadingPendings, pendingE } = useFetchPendings(user, loading, refreshTrigger);
+  const { projects, loadingProjects, projectError } = useFetchProjects(user, loading, refreshTrigger);
+  const { actions, loadingActions, actionError } = useFetchActions(user, loading, refreshTrigger);
+  const { pendings, loadingPendings, pendingError } = useFetchPendings(user, loading, refreshTrigger);
 
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const openActionModal = () => setIsActionModalOpen(true);
@@ -105,7 +105,7 @@ function Page() {
         </div>
         )}
       
-        <button 
+        <button className="mt-3"
           onClick={openProjectModal} >
           New Project
         </button>
@@ -117,7 +117,7 @@ function Page() {
         <ButtonProjectSettings/>
       </div>
 
-          {isActionModalOpen && <EditAction onClose={closeActionModal} />}
+          {/* {isActionModalOpen && <EditAction onClose={closeActionModal} />} */}
           {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
 
           {isProjectModalOpen && (
