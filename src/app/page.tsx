@@ -11,9 +11,12 @@ export default function Home() {
   const router = useRouter();
   const { signIn, loading, user } = useAuth(); 
 
+  const DEMO_E : string = process.env.NEXT_PUBLIC_DEMO_EMAIL!;
+  const DEMO_P : string = process.env.NEXT_PUBLIC_DEMO_PASSWORD!;
+
   const DemoSignIn = async () => {
     try {
-      await signIn('daily.u.demo@gmail.com', 'dailyudemo1!');
+      await signIn(DEMO_E, DEMO_P);
       router.push("/admin");
 
     } catch (error) {
@@ -57,19 +60,19 @@ export default function Home() {
         <p></p>
       </div>
         
-      <div className="z-10 w-full max-w-5xl items-center justify-around font-mono text-sm lg:flex">
+      <div className="flex z-10 w-full max-w-5xl items-center justify-around font-mono text-sm lg:flex">
 
-        <Button onClick={DemoSignIn} size="lg" className={"bg-[#F9DFDF] hover:bg-[#F5AFAF] transition-colors duration-150"}>
+        <Button onClick={DemoSignIn} size="default" className={"bg-[#F9DFDF] hover:bg-[#F5AFAF] transition-colors duration-150"}>
           <p className="text-[#4B4444]">DEMO</p>
         </Button>
-{/* 
-        <Button asChild variant="outline" size="lg">
+
+        <Button asChild variant="outline" size="default">
           <Link href="/signin">Sign In</Link>
         </Button>
 
-        <Button asChild variant="outline" size="lg">
+        <Button asChild variant="outline" size="default">
           <Link href="/signup">Sign Up</Link>
-        </Button> */}
+        </Button>
 
         
       </div>
