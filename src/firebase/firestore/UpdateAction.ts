@@ -1,7 +1,6 @@
 import firebase_app from "../config";
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 
-// Firestore 인스턴스 가져오기
 const db = getFirestore(firebase_app);
 
 /**
@@ -25,10 +24,9 @@ export default async function UpdateAction(
 
     const docRef = doc(db, 'Actions', newData.id);
     
-    // updateDoc을 사용하여 데이터를 수정합니다.
     await updateDoc(docRef, {
       ...newData,
-      updatedAt: new Date().toISOString() // 수정 시각 기록
+      updatedAt: new Date().toISOString() 
     });
 
     result = { 

@@ -68,12 +68,11 @@ export const PendingCard = ({ action, openActionModal }: ActionCardProps) => {
   const handleCheckChange = (checked: boolean) => {
       setFormData(prevData => ({
           ...prevData,
-          isCompleted: checked, // checked 값을 isCompleted에 직접 할당
+          isCompleted: checked, 
       }));
   };
 
   if (!isVisible) {
-    // return <div className="p-4 text-green-600"> {action.name} Completed for today! </div>;
     return null
   }
   return(

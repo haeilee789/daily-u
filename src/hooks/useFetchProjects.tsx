@@ -6,7 +6,6 @@ import { db } from '@/firebase/firebase.js';
 import { Project, Action } from '@/types';
 import { getToday, getTodayFB } from '@/lib/timeUtils';
 
-// 가정: 현재 인증된 사용자 정보와 인증 상태 로딩 여부를 인수로 받음
 export const useFetchProjects = (user: any | null, authLoading: boolean, refreshTrigger: any) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
@@ -47,8 +46,8 @@ export const useFetchProjects = (user: any | null, authLoading: boolean, refresh
         setProjects(projectsList);
 
       } catch (e) {
-        console.error("프로젝트 조회 중 오류 발생:", e);
-        setProjectError(e as Error); // 오류 상태 저장
+        console.error("Failed to load Project data", e);
+        setProjectError(e as Error); 
         setProjects([]);
       } finally {
         setLoadingProjects(false);
@@ -58,6 +57,5 @@ export const useFetchProjects = (user: any | null, authLoading: boolean, refresh
     fetchProjects();
   }, [user, authLoading, refreshTrigger]);
 
-  // 필요한 상태와 값을 반환
   return { projects, loadingProjects, projectError }; 
 };

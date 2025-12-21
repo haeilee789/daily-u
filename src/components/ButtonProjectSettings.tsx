@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuthContext } from '@/context/AuthContext'; 
-import { useRouter } from 'next/navigation'; // Next.js 환경이라면
+import { useRouter } from 'next/navigation';
 
 const ButtonProjectSettings = () => {
   const { user, signOut } = useAuthContext(); 

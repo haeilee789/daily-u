@@ -24,8 +24,6 @@ function Page() {
 
     if (loading) return <p>인증 정보 확인 중...</p>;
 
-  
-
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="w-full max-w-xs">

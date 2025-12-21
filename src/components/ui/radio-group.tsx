@@ -33,15 +33,14 @@ const RadioGroupItem = React.forwardRef<
         className
       )}
       style={{
-        // 크기를 딱 고정해서 어떤 상황에서도 변하지 않게 합니다.
         width: '16px',
         height: '16px',
-        minWidth: '16px',  // 축소 방지
-        minHeight: '16px', // 축소 방지
-        padding: '0px',    // 글로벌 버튼의 패딩 제거
+        minWidth: '16px',  
+        minHeight: '16px', 
+        padding: '0px',   
         margin: '0px',
-        borderWidth: '1px', // 테두리 두께 고정
-        boxSizing: 'border-box', // 테두리가 크기에 포함되도록 설정
+        borderWidth: '1px', 
+        boxSizing: 'border-box', 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -51,7 +50,6 @@ const RadioGroupItem = React.forwardRef<
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        {/* <Circle className="h-3.5 w-3.5 fill-primary" /> */}
         <Circle className="h-3.5 w-3.5 fill-black" />
 
       </RadioGroupPrimitive.Indicator>

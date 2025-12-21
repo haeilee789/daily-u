@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuthContext } from '@/context/AuthContext'; 
-import { useRouter } from 'next/navigation'; // Next.js 환경이라면
+import { useRouter } from 'next/navigation'; 
 
 const SignOutButton = () => {
   const { user, signOut } = useAuthContext(); 
@@ -18,7 +18,6 @@ const SignOutButton = () => {
     }
   };
 
-  // 사용자가 로그인 상태일 때만 버튼을 보여줍니다.
   if (!user) {
     return null;
   }
@@ -31,9 +30,7 @@ const SignOutButton = () => {
     </button>
   );
 };
-{/* <Button onClick={DemoSignIn} size="lg" className={"bg-[#F9DFDF] hover:bg-[#F5AFAF] transition-colors duration-150"}>
-          <p className="text-[#4B4444]">DEMO</p>
-        </Button> */}
+
 export default SignOutButton;
 
 

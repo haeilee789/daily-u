@@ -2,11 +2,11 @@ import { Timestamp } from 'firebase/firestore';
 import { DailyBounds } from '../types';
 
 export const createDailyBounds = (): DailyBounds => {
-  // 오늘 날짜의 시작 시간 (00:00:00)
+  //  (00:00:00)
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0); 
 
-  // 오늘 날짜의 끝 시간 (23:59:59.999)
+  //  (23:59:59.999)
   const endOfToday = new Date();
   endOfToday.setHours(23, 59, 59, 999);
 

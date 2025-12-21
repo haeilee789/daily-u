@@ -2,10 +2,7 @@ import React, {useContext} from 'react';
 import { useEffect, useState } from "react";
 import { AuthContext } from '@/context/AuthContext';
 import { collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
-import { db } from '@/firebase/firebase.js'; // 위에서 생성한 db 인스턴스
-import { useAuth }from '@/hooks/useAuth'; // <--- 🔑 커스텀 훅 불러오기
-import { Project, Action } from '@/types'
-import CreateAction from '@/firebase/firestore/CreateAction';
+import { db } from '@/firebase/firebase.js'; 
 
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -15,7 +12,6 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void; 
   onCreated: () => void;  
-  // children: React.ReactNode;
 }
 
 const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {

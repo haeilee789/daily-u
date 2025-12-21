@@ -17,29 +17,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import UpdateAction from '@/firebase/firestore/UpdateAction';
-import { get } from 'http';
 
 
 
 interface ProjectCardProps {
-  project: Project; // 개별 프로젝트 객체
-  openActionModal: (projectId: number | string) => void; // 모달을 여는 함수 (id를 전달하도록 수정)
-
+  project: Project; 
+  openActionModal: (projectId: number | string) => void; 
   
 }
-
-// export default async function updateAction(
-//   collection: string,
-//   id: string,
-//   data: any
-// )
-
 
 
 export const ProjectCard = ({ project, openActionModal }: ProjectCardProps) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [ input, setInput ] = useState('');
-  const [ isChecked, setIsChecked] = useState(false);
   const today = getToday();
 
 
@@ -78,7 +67,7 @@ export const ProjectCard = ({ project, openActionModal }: ProjectCardProps) => {
   const handleCheckChange = (checked: boolean) => {
       setFormData(prevData => ({
           ...prevData,
-          isCompleted: checked, // checked 값을 isCompleted에 직접 할당
+          isCompleted: checked, 
       }));
   };
 
