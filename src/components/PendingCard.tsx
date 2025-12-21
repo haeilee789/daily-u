@@ -95,7 +95,7 @@ export const PendingCard = ({ action, openActionModal }: ActionCardProps) => {
               </div>
 
         </ItemActions>
-          <Button type="submit">Save</Button>
+          <Button type="submit" size="sm">Save</Button>
 
       </Item>
     </form>

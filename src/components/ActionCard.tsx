@@ -108,7 +108,7 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
           }
 
         </ItemActions>
-          <Button className='bg-[#7D7373]' type="submit">Save</Button>
+          <Button className='bg-[#7D7373]' type="submit" size="sm">Save</Button>
 
       </Item>
     </form>
