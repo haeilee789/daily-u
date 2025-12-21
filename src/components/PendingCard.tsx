@@ -46,11 +46,10 @@ export const PendingCard = ({ action, openActionModal }: ActionCardProps) => {
     const { result, error } = await UpdateAction(action.id, formData);
 
     if(error){
-      console.error("Failed to save the action:", error);
+      console.error(`Failed to save the action:: ${error}`);
       alert(`저장 실패: ${error}`);
 
     } else{
-      console.log("액션 업데이트 성공:", result);
       alert("Pending Action successfully cleared!!");
       setIsVisible(false);
     }

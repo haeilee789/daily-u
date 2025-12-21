@@ -19,16 +19,15 @@ export default async function CreateAction(
       name: formData.name,
       goal: formData.goal,
       projectId: formData.projectId,
-      isCompleted: false, //cb일때 체크박스 상태용으로도 표시
+      isCompleted: false, 
       reason: "",
       date: formData.startDate,
       userId: formData.userId
 
     });
-    console.log("await 완료, alert 직전")
 
     result = { 
-      message: `액션 ID "${newDocref.id}"가 성공적으로 생성되었습니다.`,
+      message: `Action ID "${newDocref.id}" was successfully created`,
       docId: newDocref.id,
       updatedFields: newDocref
     };

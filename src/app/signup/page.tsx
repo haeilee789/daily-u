@@ -8,24 +8,18 @@ function Page() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  // Handle form submission
   const handleForm = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-      console.log("hello");
 
-    // Attempt to sign up with provided email and password
     const { result, error } = await signUp(email, password);
 
     if (error) {
-      // Display and log any sign-up errors
       console.log(error);
       return;
     }
 
-    // Sign up successful
     console.log(result);
 
-    // Redirect to the admin page
     router.push("/admin");
   }
 

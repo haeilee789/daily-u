@@ -26,17 +26,6 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
   const [goal, setGoal] = useState('');
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]); // 오늘 날짜로 초기화x
   const [type, setType] = useState("text");
-  // const [isCheckbox, setCheckbox] = useState(false);
-
-  // const handleSave = async (e: React.FormEvent) => {
-  //   console.log("handling the save");
-  //   e.preventDefault();
-
-  //   if (!projectName) { 
-  //     alert("프로젝트 이름을 입력하세요.");
-  //     return; 
-  //   }
-  // }
 
   if (loading) {
     return <p>로딩 중...</p>;
@@ -49,20 +38,16 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
 
   const handleTypeChange = (value : string) => {
     setType(value);
-    // if (value =='checkbox') setCheckbox(true)
-    //   else setCheckbox(false)
   }
 
   const handleSave = async(e : any) => {
     e.preventDefault()
-    console.log("handling the save");
       if (!projectName) { 
       alert("Enter your project name.");
       return; 
     } 
 
       try {
-      console.log("저장 시작");
       
       const collectionRef = collection(db, "Projects");
 
@@ -84,12 +69,11 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
         name: newProject.name,
         goal: newProject.goal,
         projectId: newProjectRef.id,
-        isCompleted: false, //cb일때 체크박스 상태용으로도 표시
+        isCompleted: false, 
         reason: "",
         date: startDate
       }
 
-      console.log("Firestore 액션생성작업 시작...");
 
       const connectionRefAction = collection(db, "Actions");
       const newActionRef = await addDoc(connectionRefAction, {
@@ -98,16 +82,14 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
         name: actionData.name,
         goal: actionData.goal,
         projectId: actionData.projectId,
-        isCompleted: false, //cb일때 체크박스 상태용으로도 표시
+        isCompleted: false, 
         reason: "",
         date: newProject.startDate,
         userId: userEmail
       });
 
-      console.log("await 완료, alert 직전")
     
-      console.log( `액션 ID "${newActionRef.id}"가 성공적으로 생성되었습니다.`)
-      alert("프로젝트가 성공적으로 추가되었습니다!");
+      alert("Project is successfully created!");
       onCreated();
       onClose(); 
 
@@ -115,7 +97,7 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
     } catch (error) {
       
       console.error("문서 작성 중 오류 발생:", error);
-      alert("데이터베이스 저장에 실패했습니다.");
+      alert("Failed to create the project."+ error);
     } 
 
     
@@ -191,7 +173,6 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
             </button>
             <button 
               type="submit" 
-              // className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
               Save
             </button>
