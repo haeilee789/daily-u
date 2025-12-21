@@ -6,7 +6,7 @@ based on so-called the SPF principle
 
 Simplicity : One SIMPLE action a day
 
-Priotise : No more than 3 projects at once
+Priority : No more than 3 projects at once
 
 Final : Today's Action: Today Only
 
