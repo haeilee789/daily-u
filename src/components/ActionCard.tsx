@@ -49,11 +49,9 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
     const { result, error } = await UpdateAction(action.id, formData);
 
     if(error){
-      console.error("Failed to save the action:", error);
-      alert(`저장 실패: ${error}`);
+      alert(`Failed to save Action: ${error}`);
 
     } else{
-      console.log("액션 업데이트 성공:", result);
       alert("Action content successfully saved!!");
       setIsVisible(false);
     }
@@ -71,7 +69,7 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
   const handleCheckChange = (checked: boolean) => {
       setFormData(prevData => ({
           ...prevData,
-          isCompleted: checked, // checked 값을 isCompleted에 직접 할당
+          isCompleted: checked, 
       }));
   };
 

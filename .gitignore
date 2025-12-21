@@ -41,3 +41,5 @@ next-env.d.ts
 .apphosting/
 # Firebase debug log
 firebase-debug.log*
+
+firebase/config.ts

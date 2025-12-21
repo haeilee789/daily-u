@@ -38,7 +38,6 @@ function Page() {
   
   const handleProjectRefresh = useCallback(() => {
     setRefreshTrigger(prev => prev + 1); // 
-    console.log("프로젝트 목록 새로고침 신호 발생!");
   }, []);
 
   const handleProjectCreationSuccess = () => {
@@ -67,7 +66,6 @@ function Page() {
       <div className="flex justify-between items-start space-x-3 gap-2">
         <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">Pending Tasks</p>
-          {/* <p className="font-light text-gray-500"> Add logs for missed actions</p> */}
           {loading || loadingProjects || loadingPendings? (
 
           <p className="text-lg text-gray-500">Loading...</p>
@@ -89,7 +87,6 @@ function Page() {
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">TODAY : {today}</p>
             
             
-        {/* {loading || loadingProjects ? ( */}
         {loading || loadingProjects || loadingActions? (
 
         <p className="text-lg text-gray-500">Loading...</p>
@@ -98,7 +95,6 @@ function Page() {
           {actions.length === 0 ? (
             <NoProjectAlert/>
           ) : (                  
-            // <ProjectList projects={projects}/>
             <ActionList actions={actions}/>
 
           )
@@ -117,10 +113,6 @@ function Page() {
         </button>        
       )}
       </div>
-      {/* <button className="mt-3"
-        onClick={openProjectModal} >
-        New Project
-      </button> */}
 
       </div>  
 
@@ -130,9 +122,6 @@ function Page() {
         <SignOutButton/>
         <ButtonProjectSettings/>
       </div>
-
-          {/* {isActionModalOpen && <EditAction onClose={closeActionModal} />} */}
-          {/* {isProjectModalOpen && <CreateProject onClose={closeProjectModal} />} */}
 
           {isProjectModalOpen && (
             <CreateProjectModal 
