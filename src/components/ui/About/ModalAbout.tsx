@@ -1,18 +1,9 @@
 import React, { useState } from 'react';
 
-const ButtonAbout = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleModal = () => setIsOpen(!isOpen);
 
-  return (
-    <>
-      <button className=" bg-[#F5AFAF] hover:bg-[#F9DFDF] text-[#7D7373] font-bold py-2 px-4 rounded transition duration-150;"
-        onClick={toggleModal}
-      >
-        About & How to Use
-      </button>
+export const ModalAbout = ( { toggleModal }) => {
 
-      {isOpen && (
+    return (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           onClick={toggleModal} 
@@ -35,15 +26,11 @@ const ButtonAbout = () => {
                   onClick={toggleModal}
                   className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-all"
                 >
-                  닫기
+                  Close
                 </button>
               </div>
             </div>
           </div>
         </div>
-      )}
-    </>
-  );
-};
-
-export default ButtonAbout;
+    )
+}

@@ -4,7 +4,6 @@ import { Project, Action } from '@/types'
 import { ProjectCard } from './ProjectCard';
 
 
-
 interface ActionListProps {
   actions: Action[];
 }

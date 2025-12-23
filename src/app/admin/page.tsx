@@ -17,8 +17,8 @@ import SignOutButton from "@/components/signOut";
 import ActionList from "@/components/ActionList";
 import PendingList from "@/components/PendingList";
 import { useFetchPendings } from "@/hooks/useFetchPendings";
-import ButtonProjectSettings from "@/components/ButtonProjectSettings";
-import ButtonAbout from "@/components/ButtonAbout";
+import ButtonProjectSettings from "@/components/ui/ProjectSettings/ButtonProjectSettings";
+import ButtonAbout from "@/components/ui/About/ButtonAbout";
 
 function Page() {
   const today = getToday();
@@ -27,10 +27,6 @@ function Page() {
   const { projects, loadingProjects, projectError } = useFetchProjects(user, loading, refreshTrigger);
   const { actions, loadingActions, actionError } = useFetchActions(user, loading, refreshTrigger);
   const { pendings, loadingPendings, pendingError } = useFetchPendings(user, loading, refreshTrigger);
-
-  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
-  const openActionModal = () => setIsActionModalOpen(true);
-  const closeActionModal = () => setIsActionModalOpen(false);
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const openProjectModal = () => setIsProjectModalOpen(true);
@@ -120,7 +116,7 @@ function Page() {
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242] tracking-tight">Settings</p>
         <ButtonAbout/>
         <SignOutButton/>
-        <ButtonProjectSettings/>
+        <ButtonProjectSettings projects={projects}/>
       </div>
 
           {isProjectModalOpen && (

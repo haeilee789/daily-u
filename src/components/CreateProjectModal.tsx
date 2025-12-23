@@ -24,11 +24,11 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
   const [type, setType] = useState("text");
 
   if (loading) {
-    return <p>로딩 중...</p>;
+    return <p>Loading...</p>;
   }
   
   if (!user) {
-    return <p>로그인이 필요합니다.</p>;
+    return <p>Please sign in.</p>;
   }
   const userEmail = user.email
 
@@ -70,8 +70,8 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
         date: startDate
       }
 
-
       const connectionRefAction = collection(db, "Actions");
+
       const newActionRef = await addDoc(connectionRefAction, {
         type: actionData.type,
         content: actionData.content,
@@ -102,8 +102,8 @@ const CreateProject = ({ isOpen, onClose, onCreated }:ModalProps) => {
   if (!isOpen) return null;
 
   return (
-  <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full relative z-10">
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full relative z-10 ">
       <h2 className="text-2xl font-bold mb-4">Create a New Project</h2>
         
         <form onSubmit={handleSave}>
