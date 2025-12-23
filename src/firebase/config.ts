@@ -22,7 +22,7 @@ if (typeof window !== "undefined") {
     
     auth = getAuth(firebase_app); 
     
-    console.log("Firestore DB 인스턴스 초기화 완료:", db); 
+    // console.log("Firestore DB 인스턴스 초기화 완료:", db); 
 }
 
 export { db, auth };
