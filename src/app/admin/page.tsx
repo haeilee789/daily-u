@@ -41,6 +41,55 @@ function Page() {
       handleProjectRefresh();    
   };
 
+  const PendingListPanel = () => {
+    return <>
+      {loading || loadingProjects || loadingPendings? (
+
+        <p className="text-lg text-gray-500">Loading...</p>
+          ) : (
+          <div className="flex flex-wrap gap-6">
+          {pendings.length === 0 ? (
+            <NoProjectAlert/>
+          ) : (                  
+            <PendingList actions={pendings}/>
+
+          )
+        }
+        </div>
+        )}
+    </>
+  }
+
+  const ActionListPanel = () => {
+    return <>
+    {loading || loadingProjects || loadingActions? (
+      <p className="text-lg text-gray-500">Loading...</p>
+        ) : (
+        <div className="flex items-center justify-center ">
+        {actions.length === 0 ? (
+          <NoProjectAlert/>
+        ) : (                  
+          <ActionList actions={actions}/>
+
+        )
+      }
+      </div>
+      )}
+    </>
+  }
+
+  const NewProjectButton = () => {
+    return <>
+      {projects.length === 3? (
+          <p></p>
+        ): (
+        <button className="mt-3"
+          onClick={openProjectModal} >
+          New Project
+        </button>        
+      )}
+    </>
+  }
   useEffect(() => {
     if (user == null) {
       router.push("/");
@@ -62,57 +111,20 @@ function Page() {
       <div className="flex justify-between items-start space-x-3 gap-2">
         <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">Pending Tasks</p>
-          {loading || loadingProjects || loadingPendings? (
-
-          <p className="text-lg text-gray-500">Loading...</p>
-            ) : (
-            <div className="flex flex-wrap gap-6">
-            {pendings.length === 0 ? (
-              <NoProjectAlert/>
-            ) : (                  
-              <PendingList actions={pendings}/>
-
-            )
-          }
-          </div>
-          )}
-
+          <PendingListPanel></PendingListPanel>
       </div>
           
       <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white gap-2">
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">TODAY : {today}</p>
-            
-            
-        {loading || loadingProjects || loadingActions? (
-
-        <p className="text-lg text-gray-500">Loading...</p>
-          ) : (
-          <div className="flex items-center justify-center ">
-          {actions.length === 0 ? (
-            <NoProjectAlert/>
-          ) : (                  
-            <ActionList actions={actions}/>
-
-          )
-        }
-        </div>
-        )}
-      
-      
+          <ActionListPanel></ActionListPanel>
       <div>
-        {projects.length === 3? (
-          <p></p>
-        ): (
-        <button className="mt-3"
-          onClick={openProjectModal} >
-          New Project
-        </button>        
-      )}
+        <NewProjectButton></NewProjectButton>
+        
       </div>
 
       </div>  
 
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
+      <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242] tracking-tight">Settings</p>
         <ButtonAbout/>
         <SignOutButton/>

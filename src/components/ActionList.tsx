@@ -18,7 +18,7 @@ const ActionList = ({ actions }: ActionListProps) => {
   };
 
   return (
-    <div id="actionListWrapper">
+    <div>
       {Array.isArray(actions) && actions.map(action => (
         <ActionCard 
           key={action.id}

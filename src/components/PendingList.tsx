@@ -19,7 +19,6 @@ const PendingList = ({ actions }: ActionListProps) => {
 
   return (
     <div className="flex flex-wrap gap-6 justify-center">
-      {/* <p>Action List</p> */}
       {Array.isArray(actions) && actions.map(action => (
         <PendingCard 
           key={action.id}

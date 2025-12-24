@@ -1,6 +1,6 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
+@tailwind base;
+/* @tailwind components; */
+@tailwind utilities; 
 
 @plugin "tailwindcss-animate";
 @import "tailwindcss";
@@ -129,6 +129,7 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -144,5 +145,14 @@ html, body {
     @apply bg-[#F9DFDF] hover:bg-[#F5AFAF] text-[#7D7373] font-bold py-2 px-4 rounded transition duration-150;
   }
 
+  @layer components{
+    .dailyUHeader{
+      @apply text-[#F5AFAF] 
+          text-5xl sm:text-7xl lg:text-8xl      
+          font-semibold                       
+          leading-none                         
+          tracking-tight mb-4;
+    }
+  }
   
 }
