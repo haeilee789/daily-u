@@ -1,14 +1,18 @@
 import React from 'react';
 import { useAuthContext } from '@/context/AuthContext'; 
 import { useRouter } from 'next/navigation';
+import { Project, Action } from '@/types'
 
-const ButtonProjectSettings = () => {
+interface BPSProps {
+  projects : Project[]
+}
+const ButtonProjectSettings = ({projects} : BPSProps) => {
   const { user, signOut } = useAuthContext(); 
   const router = useRouter(); 
 
   const handleClick = async () => {
+    alert(" 🚧 🦺 Under Maintenance!!! 🧱⚙️ ")
     try {
-      
     } catch (error) {
     }
   };

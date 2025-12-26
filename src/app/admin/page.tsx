@@ -83,7 +83,7 @@ function Page() {
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242] tracking-tight">Settings</p>
         <ButtonAbout/>
         <SignOutButton/>
-        {/* <ButtonProjectSettings projects={projects}/> */}
+        <ButtonProjectSettings projects={projects}/>
       </div>
 
           {isProjectModalOpen && (
