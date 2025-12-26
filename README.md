@@ -14,6 +14,8 @@ Final : Today's Action: Today Only
 I came up with this concept out of searching for the right tracker of my own needs and failing it. I wanted a to-do list app that is simple enough for me : One simple action a day for a project, number of days of success and missing, and a note if I missed so that I can review and adjust actions for tomorrow's success.
 ## System Architechture
 <img width="853" height="445" alt="Image" src="https://github.com/user-attachments/assets/3f50ac99-991c-4742-ae90-80765449d322" />
+
+
 ## Demo
 
 https://idyllic-ethos-480508-h0.web.app/
