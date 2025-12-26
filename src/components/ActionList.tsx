@@ -1,39 +1,41 @@
 import React, { useState } from 'react';
 import { ActionCard } from './ActionCard';
 import { Project, Action } from '@/types'
-import { ProjectCard } from './ProjectCard';
+import NoProjectAlert from "@/components/NoProjectAlert";
 
 
 interface ActionListProps {
+  loading: boolean,
+  loadingActions:boolean,
   actions: Action[];
 }
 
-const ActionList = ({ actions }: ActionListProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedActionId, setSelectedActionId] = useState<number | string | null>(null);
+const ActionList = ({ loading, loadingActions, actions }: ActionListProps) => {
 
-  const openActionModal = (actionId: number | string) => {
-    setSelectedActionId(actionId);
-    setIsModalOpen(true);
-  };
-
-  return (
-    <div>
-      {Array.isArray(actions) && actions.map(action => (
-        <ActionCard 
-          key={action.id}
-          action={action}
-          openActionModal={openActionModal}
-        />
-      ))}
-      
-      {isModalOpen && (
-        <div className="modal-placeholder">
-          선택된 액션 ID: {selectedActionId}
+  return <>
+    {loading || loadingActions? (
+      <p className="text-lg text-gray-500">Loading...</p>
+        ) : (
+        <div className="flex items-center justify-center ">
+        {actions.length === 0 ? (
+          <NoProjectAlert/>
+        ) : (                  
+        <div id="actionListWrapper">
+          {Array.isArray(actions) && actions.map(action => (
+            <ActionCard 
+              key={action.id}
+              action={action}
+            />
+          ))}
         </div>
+        )
+      }
+      </div>
       )}
-    </div>
-  );
+    </>
+
+ 
+
 };
 
 export default ActionList;

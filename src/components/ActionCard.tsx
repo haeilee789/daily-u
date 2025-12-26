@@ -23,7 +23,6 @@ import { get } from 'http';
 
 interface ActionCardProps {
   action: Action; 
-  openActionModal: (projectId: number | string) => void; 
 }
 
 export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {

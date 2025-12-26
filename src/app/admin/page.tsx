@@ -17,8 +17,9 @@ import SignOutButton from "@/components/signOut";
 import ActionList from "@/components/ActionList";
 import PendingList from "@/components/PendingList";
 import { useFetchPendings } from "@/hooks/useFetchPendings";
-import ButtonProjectSettings from "@/components/ui/ProjectSettings/ButtonProjectSettings";
+import ButtonProjectSettings from "@/components/ButtonProjectSettings";
 import ButtonAbout from "@/components/ui/About/ButtonAbout";
+import NewProjectButton from "@/components/NewProjectButton";
 
 function Page() {
   const today = getToday();
@@ -33,7 +34,7 @@ function Page() {
   const closeProjectModal = () => setIsProjectModalOpen(false);
   
   const handleProjectRefresh = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1); // 
+    setRefreshTrigger(prev => prev + 1); 
   }, []);
 
   const handleProjectCreationSuccess = () => {
@@ -41,55 +42,7 @@ function Page() {
       handleProjectRefresh();    
   };
 
-  const PendingListPanel = () => {
-    return <>
-      {loading || loadingProjects || loadingPendings? (
 
-        <p className="text-lg text-gray-500">Loading...</p>
-          ) : (
-          <div className="flex flex-wrap gap-6">
-          {pendings.length === 0 ? (
-            <NoProjectAlert/>
-          ) : (                  
-            <PendingList actions={pendings}/>
-
-          )
-        }
-        </div>
-        )}
-    </>
-  }
-
-  const ActionListPanel = () => {
-    return <>
-    {loading || loadingProjects || loadingActions? (
-      <p className="text-lg text-gray-500">Loading...</p>
-        ) : (
-        <div className="flex items-center justify-center ">
-        {actions.length === 0 ? (
-          <NoProjectAlert/>
-        ) : (                  
-          <ActionList actions={actions}/>
-
-        )
-      }
-      </div>
-      )}
-    </>
-  }
-
-  const NewProjectButton = () => {
-    return <>
-      {projects.length === 3? (
-          <p></p>
-        ): (
-        <button className="mt-3"
-          onClick={openProjectModal} >
-          New Project
-        </button>        
-      )}
-    </>
-  }
   useEffect(() => {
     if (user == null) {
       router.push("/");
@@ -111,15 +64,18 @@ function Page() {
       <div className="flex justify-between items-start space-x-3 gap-2">
         <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">Pending Tasks</p>
-          <PendingListPanel></PendingListPanel>
+          <PendingList
+            loading = { loading }
+            loadingPendings = {loadingPendings}
+            pendings = { pendings }
+          ></PendingList>
       </div>
           
       <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white gap-2">
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">TODAY : {today}</p>
-          <ActionListPanel></ActionListPanel>
+          <ActionList loading={loading} loadingActions={loadingActions} actions={actions}></ActionList>
       <div>
-        <NewProjectButton></NewProjectButton>
-        
+        <NewProjectButton loading={loading} loadingProjects={loadingProjects} projects={projects} openProjectModal={openProjectModal}></NewProjectButton>
       </div>
 
       </div>  
@@ -135,7 +91,7 @@ function Page() {
             <CreateProjectModal 
                 isOpen={isProjectModalOpen} 
                 onClose={closeProjectModal} 
-                onCreated={handleProjectCreationSuccess} // ✅ 새로고침 로직이 포함된 함수 전달
+                onCreated={handleProjectCreationSuccess}
             />
         )}
       </div>

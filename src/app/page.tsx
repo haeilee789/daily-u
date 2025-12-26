@@ -15,6 +15,10 @@ export default function Home() {
   const DEMO_P : string = process.env.NEXT_PUBLIC_DEMO_PASSWORD!;
 
   const DemoSignIn = async () => {
+    if(DEMO_E == undefined){
+      alert("Demo temporarily unavailable. Please try again later!")
+      return;
+    }
     try {
       await signIn(DEMO_E, DEMO_P);
       router.push("/admin");
