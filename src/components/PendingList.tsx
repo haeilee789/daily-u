@@ -2,39 +2,55 @@ import React, { useState } from 'react';
 import { PendingCard } from './PendingCard';
 import { Project, Action } from '@/types'
 import { ProjectCard } from './ProjectCard';
+import NoProjectAlert from "@/components/NoProjectAlert"
 
 
 interface ActionListProps {
-  actions: Action[];
+  loading : Boolean,
+  loadingPendings: Boolean,
+  pendings: Action[];
 }
 
-const PendingList = ({ actions }: ActionListProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedActionId, setSelectedActionId] = useState<number | string | null>(null);
+const PendingList = ({ loading, loadingPendings, pendings }: ActionListProps) => {
+ 
+  return <>
+    { loading || loadingPendings? (
 
-  const openActionModal = (actionId: number | string) => {
-    setSelectedActionId(actionId);
-    setIsModalOpen(true);
-  };
+    <p className="text-lg text-gray-500">Loading...</p>
+      ) : (
+      <div className="flex flex-wrap gap-6">
+      {pendings.length === 0 ? (
+        <NoProjectAlert/>
+      ) : (             
 
-  return (
-    <div className="flex flex-wrap gap-6 justify-center">
-      {/* <p>Action List</p> */}
-      {Array.isArray(actions) && actions.map(action => (
-        <PendingCard 
-          key={action.id}
-          action={action}
-          openActionModal={openActionModal}
-        />
-      ))}
-      
-      {isModalOpen && (
-        <div className="modal-placeholder">
-          선택된 액션 ID: {selectedActionId}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-6 justify-center">
+        
+        {Array.isArray(pendings) && pendings.map(action => (
+          <PendingCard 
+            key={action.id}
+            action={action}
+          />
+        ))}
+      </div>
+      )
+    }
     </div>
-  );
+    )}
+  </>
+
+
+
+
+    // <div className="flex flex-wrap gap-6 justify-center">
+      
+    //   {Array.isArray(actions) && actions.map(action => (
+    //     <PendingCard 
+    //       key={action.id}
+    //       action={action}
+    //     />
+    //   ))}
+    // </div>
+  
 };
 
 export default PendingList;

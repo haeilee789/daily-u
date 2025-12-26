@@ -19,6 +19,7 @@ import PendingList from "@/components/PendingList";
 import { useFetchPendings } from "@/hooks/useFetchPendings";
 import ButtonProjectSettings from "@/components/ButtonProjectSettings";
 import ButtonAbout from "@/components/ButtonAbout";
+import NewProjectButton from "@/components/NewProjectButton";
 
 function Page() {
   const today = getToday();
@@ -28,16 +29,12 @@ function Page() {
   const { actions, loadingActions, actionError } = useFetchActions(user, loading, refreshTrigger);
   const { pendings, loadingPendings, pendingError } = useFetchPendings(user, loading, refreshTrigger);
 
-  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
-  const openActionModal = () => setIsActionModalOpen(true);
-  const closeActionModal = () => setIsActionModalOpen(false);
-
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
   
   const handleProjectRefresh = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1); // 
+    setRefreshTrigger(prev => prev + 1); 
   }, []);
 
   const handleProjectCreationSuccess = () => {
@@ -66,68 +63,34 @@ function Page() {
       <div className="flex justify-between items-start space-x-3 gap-2">
         <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white">
           <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">Pending Tasks</p>
-          {loading || loadingProjects || loadingPendings? (
-
-          <p className="text-lg text-gray-500">Loading...</p>
-            ) : (
-            <div className="flex flex-wrap gap-6">
-            {pendings.length === 0 ? (
-              <NoProjectAlert/>
-            ) : (                  
-              <PendingList actions={pendings}/>
-
-            )
-          }
-          </div>
-          )}
-
+          <PendingList
+            loading = { loading }
+            loadingPendings = {loadingPendings}
+            pendings = { pendings }
+          ></PendingList>
       </div>
           
       <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white gap-2">
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">TODAY : {today}</p>
-            
-            
-        {loading || loadingProjects || loadingActions? (
-
-        <p className="text-lg text-gray-500">Loading...</p>
-          ) : (
-          <div className="flex items-center justify-center ">
-          {actions.length === 0 ? (
-            <NoProjectAlert/>
-          ) : (                  
-            <ActionList actions={actions}/>
-
-          )
-        }
-        </div>
-        )}
-      
-      
+          <ActionList loading={loading} loadingActions={loadingActions} actions={actions}></ActionList>
       <div>
-        {projects.length === 3? (
-          <p></p>
-        ): (
-        <button className="mt-3"
-          onClick={openProjectModal} >
-          New Project
-        </button>        
-      )}
+        <NewProjectButton loading={loading} loadingProjects={loadingProjects} projects={projects} openProjectModal={openProjectModal}></NewProjectButton>
       </div>
 
       </div>  
 
-      <div className="w-1/3 p-6 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
+      <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white flex flex-col items-center gap-4">
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242] tracking-tight">Settings</p>
         <ButtonAbout/>
         <SignOutButton/>
-        <ButtonProjectSettings/>
+        {/* <ButtonProjectSettings projects={projects}/> */}
       </div>
 
           {isProjectModalOpen && (
             <CreateProjectModal 
                 isOpen={isProjectModalOpen} 
                 onClose={closeProjectModal} 
-                onCreated={handleProjectCreationSuccess} // ✅ 새로고침 로직이 포함된 함수 전달
+                onCreated={handleProjectCreationSuccess}
             />
         )}
       </div>

@@ -21,10 +21,9 @@ import { get } from 'http';
 
 interface ActionCardProps {
   action: Action; 
-  openActionModal: (projectId: number | string) => void; 
 }
 
-export const PendingCard = ({ action, openActionModal }: ActionCardProps) => {
+export const PendingCard = ({ action }: ActionCardProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [ input, setInput ] = useState('');
   const [ isChecked, setIsChecked] = useState(false);
@@ -35,9 +34,6 @@ export const PendingCard = ({ action, openActionModal }: ActionCardProps) => {
     id : action.id,
   })
   
-  const handleDetailClick = () => {
-    openActionModal(action.projectId);
-  };
 
   const handleForm = async (e:React.FormEvent) => {
     e.preventDefault() //기본폼 제출방지
