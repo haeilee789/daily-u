@@ -25,7 +25,7 @@ interface ActionCardProps {
   action: Action; 
 }
 
-export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
+export const ActionCard = ({ action }: ActionCardProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [ input, setInput ] = useState('');
   const [ isChecked, setIsChecked] = useState(false);
@@ -37,10 +37,6 @@ export const ActionCard = ({ action, openActionModal }: ActionCardProps) => {
     id : action.id
   })
   
-  const handleDetailClick = () => {
-    openActionModal(action.projectId);
-  };
-
   const handleForm = async (e:React.FormEvent) => {
     e.preventDefault() //기본폼 제출방지
     

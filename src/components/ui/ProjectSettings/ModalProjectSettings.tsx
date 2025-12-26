@@ -1,17 +1,14 @@
 import ProjectList from '@/components/ProjectList';
 import { useContext } from 'react';
 import { Project, Action } from '@/types'
-
-
 import NoProjectAlert from "@/components/NoProjectAlert";
 
-
 interface ProjectListProps {
-  projects: Project[];
+  toggleModal: () => void,
+  list: Project[];
 }
-
   
-export const ModalProjectSettings = ( { toggleModal, list } ) => {
+export const ModalProjectSettings = ( { toggleModal, list } : ProjectListProps ) => {
 
     return (
         <div

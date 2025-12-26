@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
+interface TMAProps {
+  toggleModal : () => void;
+}
 
-export const ModalAbout = ( { toggleModal }) => {
+export const ModalAbout = ( { toggleModal } : TMAProps) => {
 
     return (
         <div

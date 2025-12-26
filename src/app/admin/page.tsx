@@ -69,7 +69,7 @@ function Page() {
             loadingPendings = {loadingPendings}
             pendings = { pendings }
           ></PendingList>
-      </div>
+    </div>
           
       <div className="w-1/3 p-4 border border-gray-200 rounded-xl shadow-md text-center bg-white gap-2">
         <p className="text-sm md:text-base lg:text-lg font-semibold mb-3 text-[#434242]">TODAY : {today}</p>
